@@ -89,7 +89,7 @@
                         </td>
                         <td id="points_for_{{$groupName}}" class="points">-</td>
                     </tr>
-                    @endforeach   
+                    @endforeach
                 @endforeach
                 <tr>
                     <th>Набрано баллов:</th>
@@ -111,24 +111,25 @@
                 </tr>
             </table>
         </form>
-    @else 
+    @else
         <h3>Нет оценочных листов для должности <b>{{$employee->profession->name}}</b></h3>
     @endif
-@endsection	
+@endsection
 
 @push('after_scripts')
 <script>
 jQuery(document).ready(function($) {
-    let evaluation = JSON.parse('{!!$json!!}');
+  var json = {!! json_encode($json) !!};
+    let evaluation = JSON.parse(json);
     let validation = JSON.parse('{!!$validation!!}');
-    console.log(validation)
+
 	$('input[type="radio"]').on('change', function(){
         let criteria = $(this).data('criteria'),
             name = $(this).attr('name'),
             id = $(this).attr('id');
 		$('#points_for_'+name).html($(this).val());
         validation[name] = true;
-        
+
         for (const [key, value] of Object.entries(evaluation[criteria]['points'][name])) {
             evaluation[criteria]['points'][name][key]['selected'] = false;
         }

@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\ReportRequest;
+use App\Models\Course;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /**
  * Class ReportCrudController
@@ -21,7 +23,7 @@ class ReportCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,7 +35,7 @@ class ReportCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -42,7 +44,36 @@ class ReportCrudController extends CrudController
         $this->crud->removeAllButtons();
 
         $this->crud->enableDetailsRow();
+        $telegram = Telegram::getMe();
 
+        $telegram->addCommand(\App\Telegram\Commands\StartCommand::class);
+//        $update = Telegram::getUpdates();
+//        $lastKey = array_key_last($update);
+//        $name = $update[$lastKey]['message']['from']['first_name'];
+//        $chatId = $update[$lastKey]['message']['chat']['id'];
+//        Telegram::sendMessage([
+//            'chat_id' => $chatId,
+//            'text' => 'Добрый день! '.$name,
+//            'parse_mode' => 'html'
+//        ]);
+
+
+//        Telegram::setWebhook(['url' => 'https://127.0.0.1:8443/'.env('TELEGRAM_BOT_TOKEN').'/webhook']);
+
+        $chatId = '1315197985'; // my id
+//        $chatId = '6190451047'; // Coach id
+//        $chatId = '867008520'; // Eugen id
+        $botId = $telegram->getId();
+        $firstName = $telegram->getFirstName();
+        $username = $telegram->getUsername();
+//dd($update);
+//        $response = Telegram::getUpdates();
+
+//        $response = Telegram::sendMessage([
+//            'chat_id' => $chatId,
+//            'text' => 'Добрый день! '.$username,
+//            'parse_mode' => 'html'
+//        ]);
         /* Get only attempts of current employee */
         if(backpack_user()->hasRole('Employee')){
             $this->crud->addClause('where', 'user_id', '=', backpack_user()->id);
@@ -243,8 +274,8 @@ class ReportCrudController extends CrudController
           'type'  => 'text',
           'name'  => 'user_id',
           'label' => trans('labels.user')
-        ], 
-        false, 
+        ],
+        false,
         function($value) {
             $users = \App\Models\User::where('name', 'like', '%'.$value.'%')->get('id');
             $this->crud->addClause('whereIn', 'user_id', $users);
@@ -287,13 +318,13 @@ class ReportCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -312,13 +343,13 @@ class ReportCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -335,7 +366,7 @@ class ReportCrudController extends CrudController
             $attempts = \App\Models\Attempt::where(['quiz_id' => $report->quiz_id, 'user_id' => $report->user_id])->get();
 
             $markup = "<table>";
-    
+
             if(!empty($attempts)){
                 $markup .= "<tr><th>Попытка</th><th>Статус</th><th>Результат</th><th>Затраченно</th><th>Начало</th><th>Конец</th></tr>";
                 $a = 1;
@@ -346,11 +377,11 @@ class ReportCrudController extends CrudController
                             case 'PASSED':
                                 $class = "badge badge-success";
                                 break;
-                                
+
                             case 'FAILED':
                                 $class = "badge badge-danger";
                                 break;
-                            
+
                             case 'STARTED':
                                 $class = "badge badge-warning";
                                 break;

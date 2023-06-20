@@ -35,5 +35,7 @@ return [
 	'evaluation_papers' => 'Оценочные листы',
 	'evaluation_criterias' => 'Критерии оценки',
 	'criterias' => 'Критерии',
-	'employees' => 'Сотрудники'
+	'employees' => 'Сотрудники',
+    'skills' => 'Навыки',
+    'skill' => 'Навык',
 ];

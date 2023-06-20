@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Telegram\Bot\Laravel\Facades\Telegram;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,10 @@ Route::redirect('/admin/dashboard', '/admin/report');
 Route::get('/admin/evaluation/{employee_id}/start', 'App\Http\Controllers\Admin\EvaluationController@start');
 Route::get('/admin/evaluation/{employee_id}/list', 'App\Http\Controllers\Admin\EvaluationController@list');
 Route::post('/admin/evaluation/{employee_id}/save', 'App\Http\Controllers\Admin\EvaluationController@save');
+
+Route::get('/admin/skills-evaluation/{employee_id}/start', 'App\Http\Controllers\Admin\SkillsEvaluationController@start');
+Route::get('/admin/skills-evaluation/{employee_id}/list', 'App\Http\Controllers\Admin\SkillsEvaluationController@list');
+Route::post('/admin/skills-evaluation/{employee_id}/save', 'App\Http\Controllers\Admin\SkillsEvaluationController@save');
 
 //Route::get('/api/fix-db', 'App\Http\Controllers\Api\CompanyController@fixDb');
 Route::get('/api/company', 'App\Http\Controllers\Api\CompanyController@index');
@@ -43,3 +48,14 @@ Route::post('/quizzes/verify-quiz/{attempt_id}', 'App\Http\Controllers\QuizContr
 
 Route::get('/quizzes/fix', 'App\Http\Controllers\QuizController@fix');
 Route::get('/quizzes/fix-reports', 'App\Http\Controllers\QuizController@fixReports');
+
+//Route::post('/k11W9q7^OETVqUQrn/webhook', function () {
+//    $update = Telegram::commandsHandler(true);
+//    $updates = Telegram::getWebhookUpdate();
+//    // Commands handler method returns an Update object.
+//    // So you can further process $update object
+//
+//    // to however you want.
+//
+//    return 'ok';
+//});

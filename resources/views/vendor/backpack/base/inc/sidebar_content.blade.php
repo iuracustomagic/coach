@@ -75,6 +75,7 @@
     <ul class="nav-dropdown-items">
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('evaluation-criteria') }}'><i class='nav-icon la la-award'></i> {{ trans('nav.criterias') }}</a></li>
         <li class='nav-item'><a class='nav-link' href='{{ backpack_url('evaluation-paper') }}'><i class='nav-icon la la-chalkboard'></i> {{ trans('nav.evaluation_papers') }}</a></li>
+        <li class='nav-item'><a class='nav-link' href='{{ backpack_url('skill') }}'><i class='nav-icon la la-chalkboard'></i> {{ trans('nav.skills') }}</a></li>
     </ul>
 </li>
 @endif

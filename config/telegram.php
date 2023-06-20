@@ -30,12 +30,14 @@ return [
     */
     'bots'                         => [
         'mybot' => [
+            'username'            => env('TELEGRAM_BOT_NAME', 'YOUR_BOT_NAME'),
             'token'               => env('TELEGRAM_BOT_TOKEN', 'YOUR-BOT-TOKEN'),
             'certificate_path'    => env('TELEGRAM_CERTIFICATE_PATH', 'YOUR-CERTIFICATE-PATH'),
-            'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
+//            'webhook_url'         => env('TELEGRAM_WEBHOOK_URL', 'YOUR-BOT-WEBHOOK-URL'),
             'commands'            => [
 
-                \Telegram\Bot\Commands\StartCommand::class
+               \App\Telegram\Commands\StartCommand::class,
+                \Telegram\Bot\Commands\HelpCommand::class
             ],
         ],
 

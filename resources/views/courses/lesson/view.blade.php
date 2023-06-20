@@ -201,7 +201,7 @@
 						<div class="col-sm-12">
 							<h3>{{$lesson->name}}</h3>
 							<p>{{$lesson->description}}</p>
-							{!! $lesson->content !!}
+							<div class="pl-4">{!! $lesson->content !!}</div>
 
 							<div class="card">
 								@if($lesson->video)
@@ -236,14 +236,15 @@
 											<span class="btn btn-outline-warning">
 												{{ trans('front.total_attempts') }}: {{$lesson->quiz->userAttempts()}}
 											</span>
-											@if(!$lesson->passedByUser())
+											 @if(!$lesson->passedByUser())
 												@if($lesson->prevPassedByUser())
 													<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
-												@endif
-											@else
+												 @endif
+											 @else
 												<a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.passed') }}</a>
-											@endif
+											 @endif
 										@endif
+                                            <a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
 									</div>
 								@endif
 							</div>
