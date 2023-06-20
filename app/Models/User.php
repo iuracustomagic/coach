@@ -356,4 +356,12 @@ class User extends Authenticatable
             return null;
         }
     }
+    public function skills_evaluate($crud = false)
+    {
+//        if(null != $this->profession && null !== $this->profession->evaluation){
+            return '<a class="btn btn-sm btn-success" href="/admin/skills-evaluation/'.$this->id.'/start"><i class="la la-chalkboard"></i></a>';
+//        } else {
+//            return null;
+//        }
+    }
 }

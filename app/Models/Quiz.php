@@ -65,8 +65,8 @@ class Quiz extends Model
 
     public function questionsList()
     {
-        return $this->hasMany('App\Models\Question', 'quiz_id', 'id')->inRandomOrder()->limit($this->questions_to_show);
-//        return $this->hasMany('App\Models\Question', 'quiz_id', 'id')->limit($this->questions_to_show);
+      //  return $this->hasMany('App\Models\Question', 'quiz_id', 'id')->inRandomOrder()->limit($this->questions_to_show);
+        return $this->hasMany('App\Models\Question', 'quiz_id', 'id')->limit($this->questions_to_show);
     }
 
     public function allQuestions()

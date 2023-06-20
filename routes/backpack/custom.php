@@ -41,4 +41,5 @@ Route::group([
     // Service
     Route::get('service/fix', 'ServiceController@fix');
     Route::get('service/fix-order', 'ServiceController@fixOrder');
+    Route::crud('skill', 'SkillCrudController');
 }); // this should be the absolute last line of this file
