@@ -27,7 +27,7 @@
 </style>
 
 @section('content')
-    @if($results)
+    @if($result)
             <table class="table">
 
                 <tr>
@@ -37,46 +37,61 @@
                             <a class="btn btn-sm btn-success" href="/admin/evaluation/{{$employee->id}}/start"><i class="la la-chalkboard"></i></a>
                         </h3>
                         <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
-                        <h6>Начальник: <b>{{$employee->supervisor ? $employee->supervisor->name : '-'}}</b></h6>
-                        <h6>Средний балл за месяц: <b>{{$avg_points}}</b></h6>
-                        <h6>Средняя оценка за месяц: <b>{{$avg_mark}}</b></h6>
+                        <h6>Подразделение: <b>{{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
+
                     </th>
                     @foreach($dates as $date)
                         <th class="date">
                             <p>{{$date['date']}}</p>
                             <p>{{$date['examiner']}}</p>
-                            @if($date['comment'])
-                                <button class="btn btn-sm btn-info show-comment" data-comment="{{$date['comment']}}">
-                                    <i class="la la-comment"></i>
-                                </button>
-                            @endif
+                            <p>{{$date['recommendation']}}</p>
+
+
                         </th>
                     @endforeach
                 </tr>
+                @php $counter = 1; @endphp
+                @php echo '<pre>';
+                print_r($result);
 
-                @foreach($results as $criteria)
+                echo '</pre>';
+                exit();
+                @endphp
+                @foreach($result as $key => $criterias)
+                    @php echo '<pre>';
+                print_r($key['items']);
+                echo '</pre>';
+                exit();
+                    @endphp
                     <tr>
-                        <th>{{$criteria['title']}}</th>
-                        @for($i=0; $i < count($dates); $i++)
-                            <th></th>
-                        @endfor
+                        <th colspan="2" class="bg-info-subtle">
+                            <h5 class="m-0 fw-bold">{{$counter++}}. {{$key}}</h5>
+                        </th>
                     </tr>
-                    @foreach($criteria['points'] as $group => $point)
+                    @foreach($criterias as $criteria)
                         <tr>
-                            <td>
-                                <ul class="legend">
-                                    @foreach($point['legend'] as $title)
-                                        <li>{{$title}}</li>
-                                    @endforeach
-                                </ul>
+                            <td class="bg-body-tertiary" >
+                                <span>{{$criteria['criteria']}}</span>
+
                             </td>
-                            @foreach($point['marks'] as $date => $mark)
-                                <td class="point">
-                                    {{$mark}}
-                                </td>
-                            @endforeach
+                            <td class="w-25 bg-body-tertiary">
+                                <div class="input-group ">
+
+                                </div>
+
+                            </td>
+
                         </tr>
                     @endforeach
+                    <tr>
+                        <td class="bg-success-subtle border-bottom-3 border-top-3 border-start-0 border-end-0 border-info text-end" >
+                            <span class="fw-bold">Sub total</span>
+                        </td>
+                        <td class="bg-success-subtle border-bottom-3 border-top-3 border-start-0 border-end-0 border-info text-end" >
+
+                            <span id="{{$key}}" class="count-medium fw-bold" data-mark="{{$key}}">0</span>
+                        </td>
+                    </tr>
                 @endforeach
 
                 <tr>
