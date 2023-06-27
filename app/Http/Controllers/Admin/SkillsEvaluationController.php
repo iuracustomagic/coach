@@ -7,7 +7,7 @@ use App\Models\SkillsEvaluationResult;
 use Illuminate\Http\Request;
 
 use App\Models\User;
-use App\Models\EvaluationCriteria;
+
 use App\Models\EvaluationResult;
 
 class SkillsEvaluationController extends \App\Http\Controllers\Controller
@@ -70,8 +70,6 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
         $skillsList = Skill::all();
 
         $evaluation = [];
-        $validation = [];
-        $counter = 0;
 
         foreach($skillsList as $skill) {
             $criteria = json_decode($skill->criteria, true);
@@ -79,35 +77,11 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
 
              }
 
-//            dd($evaluation);
-//                foreach($object as $criterias){
-//                    $evaluation[$criterias->criteria]['title'] = $criteriasList[$criterias->criteria];
-//                    $points = json_decode($criterias->points, true);
-//                    $bestMark = 0;
-//                    $worstMark = 0;
-//                    foreach($points as $key => $point){
-//                        $bestMark = $point['mark'] > $bestMark ? $point['mark'] : $bestMark;
-//                        $worstMark = $point['mark'] < $worstMark ? $point['mark'] : $worstMark;
-//                        $points[$key]['selected'] = false;
-//                        $points[$point['code']] = $points[$key];
-//                        unset($points[$key]);
-//                    }
-//                    $evaluation[$criterias->criteria]['points'][$criterias->code] = $points;
-//                    $validation[$criterias->code] = false;
-//                    $evaluation[$criterias->criteria]['best'] = $bestMark;
-//                    $evaluation[$criterias->criteria]['worst'] = $worstMark;
-//                    $counter++;
-//                }
-
-
-        //dd($evaluation);
 
         return view('skills-evaluations.start', [
             'employee' => $employee,
             'evaluation' => $evaluation,
-//            'validation' => json_encode($validation, JSON_UNESCAPED_UNICODE),
-//            'counter' => $counter,
-//            'json' => json_encode($evaluation, JSON_UNESCAPED_UNICODE)
+
         ]);
     }
 
@@ -115,47 +89,55 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
     {
         $employee = User::find($employee_id);
 
-
         if(!$employee){
             abort(404, 'Employee not found');
         }
 
-        $result = [];
+        $results = [];
         $dates = [];
-        $totals = [];
-        $mark = 0;
-//        dd($employee->evaluations);
-        foreach($employee->skillsEvaluations as $evaluation){ // $employee->monthsEvaluations
-            $date = date('Y-m-d', strtotime($evaluation->created_at));
-            $result = json_decode($evaluation->result);
+        $marks = [];
+        $title_questions = [];
+        $evaluation_subtotals = [];
+        $evaluation_values = [];
 
-//            foreach($result as $id => $criteria){
-//                $results[$id]['title'] = $criteria->title;
-//                foreach($criteria->points as $group => $points){
-//                    foreach($points as $code => $point){
-//                        $results[$id]['points'][$group]['legend'][$code] = $point->title . ' (' . $point->mark . ')';
-//                        if($point->selected){
-//                            $results[$id]['points'][$group]['marks'][$date] = $point->mark;
-//                        }
-//                    }
-//                }
-//            }
+        foreach($employee->skillsEvaluations as $key => $evaluation){ // $employee->monthsEvaluations
+            $date = date('Y-m-d', strtotime($evaluation->created_at));
+            $results[$key] = json_decode($evaluation->result);
+
             $dates[] = [
                 'date' => $date,
                 'examiner' => $evaluation->examiner ? $evaluation->examiner->name : '-',
                 'recommendation' => $evaluation->recommendation,
-                'conclusion' => $evaluation->conclusion
+                'conclusion' => json_decode($evaluation->conclusion)
             ];
-//            dd($dates);
+        }
 
-            $mark = $evaluation->mark;
+
+        foreach($results as $key => $result){
+            $evaluation_key = 'eval_'.$key;
+            $marks[] = $result->finalTotal;
+            foreach($result->items as $key_title => $question_ar){
+                $evaluation_subtotals[$evaluation_key][$key_title] = $question_ar->total;
+                //dump($question_ar->total);
+                $title_questions[$key_title] = [];
+                $idx =0;
+
+                foreach ($question_ar->items as $key => $value) {
+                    ///dump($value->value);
+                    $evaluation_values[$evaluation_key][$key_title][] = $value->value;
+                    $title_questions[$key_title][$idx] = $key;
+                    $idx++;
+                }
+            }
         }
 
         return view('skills-evaluations.list', [
             'employee' => $employee,
             'dates' => $dates,
-            'result' => $result,
-            'mark' => $mark,
+            'marks' => $marks,
+            'title_questions' => $title_questions,
+            'subtotals' => $evaluation_subtotals,
+            'values' => $evaluation_values,
 
         ]);
     }
@@ -197,12 +179,7 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
 
     public function save($employee_id, Request $request)
     {
-//print_r($request->input('mark'));
-//print_r($request->input('result'));
-//print_r($request->input('conclusion'));
-//print_r( $request->input('recommendation'));
-//exit();
-//dd($request->input('result'));
+
         $skillsEvaluation = new SkillsEvaluationResult();
         $skillsEvaluation->employee_id = $employee_id;
         $skillsEvaluation->examiner_id = backpack_user()->id;
@@ -216,20 +193,7 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
         } else {
             abort(400, 'Result has not been saved');
         }
-//        $evaluation = new EvaluationResult();
-//        $evaluation->employee_id = $employee_id;
-//        $evaluation->examiner_id = backpack_user()->id;
-//        $evaluation->total_points = round($request->input('total_points'),2);
-//        $evaluation->total_questions = $request->input('total_questions');
-//        $evaluation->mark = round($request->input('mark'),2);
-//        $evaluation->result = $request->input('result');
-//        $evaluation->comment = $request->input('comment');
-//        if($evaluation->save()){
-//            //return redirect('/admin/report');
-//            return redirect("/admin/evaluation/$employee_id/list");
-//        } else {
-//            abort(400, 'Result has not been saved');
-//        }
+
     }
 }
 
