@@ -129,15 +129,15 @@ class EvaluationController extends \App\Http\Controllers\Controller
         $pointsSum = 0;
         $marksSum = 0;
         foreach($employee->evaluations as $evaluation){ // $employee->monthsEvaluations
-            $date = date('Y-m-d', strtotime($evaluation->created_at));
+            $date = date('d-m-Y', strtotime($evaluation->created_at));
             $result = json_decode($evaluation->result);
             foreach($result as $id => $criteria){
                 $results[$id]['title'] = $criteria->title;
                 foreach($criteria->points as $group => $points){
                     foreach($points as $code => $point){
-                        $results[$id]['points'][$group]['legend'][$code] = $point->title . ' (' . $point->mark . ')';
+                        $results[$id]['points'][$date][$group]['legend'][$code] = $point->title . ' (' . $point->mark . ')';
                         if($point->selected){
-                            $results[$id]['points'][$group]['marks'][$date] = $point->mark;
+                            $results[$id]['points'][$date][$group]['marks'][$date] = $point->mark;
                         }
                     }
                 }
@@ -152,7 +152,7 @@ class EvaluationController extends \App\Http\Controllers\Controller
             $totals['marks'][$date] = $evaluation->mark;
             $marksSum += $evaluation->mark;
         }
-
+//dd($results);
         return view('evaluations.list', [
             'employee' => $employee,
             'dates' => $dates,

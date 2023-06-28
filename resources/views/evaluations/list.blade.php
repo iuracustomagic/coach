@@ -23,6 +23,11 @@
     .totals{
         text-align: center;
     }
+    .date_title {
+        font-size: 24px;
+        color: #00B0E8;
+        text-align: center;
+    }
 
 </style>
 
@@ -41,56 +46,82 @@
                         <h6>Средний балл за месяц: <b>{{$avg_points}}</b></h6>
                         <h6>Средняя оценка за месяц: <b>{{$avg_mark}}</b></h6>
                     </th>
+                    <th class="date">
                     @foreach($dates as $date)
-                        <th class="date">
-                            <p>{{$date['date']}}</p>
-                            <p>{{$date['examiner']}}</p>
+
+                            <p>Дата проверки: {{$date['date']}}</p>
+                            <p>Проверял: {{$date['examiner']}}</p>
                             @if($date['comment'])
                                 <button class="btn btn-sm btn-info show-comment" data-comment="{{$date['comment']}}">
                                     <i class="la la-comment"></i>
                                 </button>
                             @endif
-                        </th>
+
                     @endforeach
+                    </th>
                 </tr>
 
-                @foreach($results as $criteria)
+                @foreach($results as  $key=>$criteria)
+
                     <tr>
                         <th>{{$criteria['title']}}</th>
-                        @for($i=0; $i < count($dates); $i++)
-                            <th></th>
-                        @endfor
+                        <th></th>
+
                     </tr>
+
                     @foreach($criteria['points'] as $group => $point)
-                        <tr>
+                        <tr> <td class="date_title">{{$group}}</td><td></td> </tr>
+
+
+                            @foreach($point as $key => $titleArr)
+                            <tr>
                             <td>
+
                                 <ul class="legend">
-                                    @foreach($point['legend'] as $title)
+                                    @foreach($titleArr['legend'] as $title)
                                         <li>{{$title}}</li>
                                     @endforeach
                                 </ul>
                             </td>
-                            @foreach($point['marks'] as $date => $mark)
-                                <td class="point">
-                                    {{$mark}}
-                                </td>
+
+                                    @foreach($titleArr['marks'] as $date => $mark)
+                                        <td class="point">
+
+                                           <p>{{$mark}}</p>
+                                        </td>
+                                    @endforeach
+
+                            </tr>
                             @endforeach
-                        </tr>
+
+
                     @endforeach
+
+
                 @endforeach
 
                 <tr>
                     <th>Набрано баллов:</th>
+                    <th class="totals">
                     @foreach($totals['points'] as $date => $points)
-                        <th class="totals">{{$points}}</th>
+                            <div>
+                                <span style="margin-right: 10px">{{$date}}  - </span>
+                                <span>{{$points}}</span>
+                            </div>
                     @endforeach
+                    </th>
                 </tr>
 
                 <tr>
-                    <th>Оценка:</th>
+                    <th colspan="1">Оценка:</th>
+                    <th class="totals">
                     @foreach($totals['marks'] as $date => $mark)
-                        <th class="totals">{{$mark}}</th>
+                    <div>
+                       <span style="margin-right: 10px">{{$date}}  - </span>
+                       <span>{{$mark}}</span>
+                    </div>
                     @endforeach
+                    </th>
                 </tr>
 
             </table>
@@ -119,6 +150,7 @@
 <script>
 jQuery(document).ready(function($) {
     $('.show-comment').on('click', function(e){
+
         e.preventDefault()
         let modal = $('#commentModal')
         modal.find('.modal-body').html($(this).data('comment'))
