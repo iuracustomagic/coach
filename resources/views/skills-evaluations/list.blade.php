@@ -67,9 +67,15 @@
                             <span>{{$k+1}}.{{$question}}</span>
                         </td>
                         @foreach($values as $eval_nr => $val)
+                            @if(isset($values[$eval_nr][$title][$k]))
                             <td class="bg-body-tertiary text-end">
                                 <span>{{$values[$eval_nr][$title][$k]}}</span>
                             </td>
+                            @else
+                                <td class="bg-body-tertiary text-end">
+                                    <span>-</span>
+                                </td>
+                            @endif
                         @endforeach
 
 
@@ -80,9 +86,15 @@
                         <span class="fw-bold">Sub total</span>
                     </td>
                     @foreach($subtotals as $eval_nr => $val)
+                        @if(isset($subtotals[$eval_nr][$title]))
                         <td class="bg-success-subtle border-bottom-3 border-top-3 border-start-0 border-end-0 border-info text-end">
                             <span>{{$subtotals[$eval_nr][$title]}}</span>
                         </td>
+                        @else
+                            <td class="bg-success-subtle border-bottom-3 border-top-3 border-start-0 border-end-0 border-info text-end">
+                                <span>-</span>
+                            </td>
+                        @endif
                     @endforeach
                 </tr>
 

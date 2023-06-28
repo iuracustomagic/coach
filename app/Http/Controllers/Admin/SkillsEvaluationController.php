@@ -123,14 +123,14 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
                 $idx =0;
 
                 foreach ($question_ar->items as $key => $value) {
-                    ///dump($value->value);
+
                     $evaluation_values[$evaluation_key][$key_title][] = $value->value;
                     $title_questions[$key_title][$idx] = $key;
                     $idx++;
                 }
             }
         }
-
+//        dd($evaluation_values);
         return view('skills-evaluations.list', [
             'employee' => $employee,
             'dates' => $dates,
