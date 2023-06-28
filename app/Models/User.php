@@ -162,6 +162,10 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\EvaluationResult','employee_id', 'id');
     }
+    public function skillsEvaluations()
+    {
+        return $this->hasMany('App\Models\SkillsEvaluationResult','employee_id', 'id');
+    }
 
     public function monthsEvaluations()
     {
@@ -359,9 +363,17 @@ class User extends Authenticatable
     public function skills_evaluate($crud = false)
     {
 //        if(null != $this->profession && null !== $this->profession->evaluation){
-            return '<a class="btn btn-sm btn-success" href="/admin/skills-evaluation/'.$this->id.'/start"><i class="la la-chalkboard"></i></a>';
+            return '<a class="btn btn-sm btn-success" href="/admin/skills-evaluation/'.$this->id.'/start"><i class="la la-area-chart"></i></a>';
 //        } else {
 //            return null;
 //        }
+    }
+    public function skills_marks($crud = false)
+    {
+        if($this->skillsEvaluations->count()){
+        return '<a class="btn btn-sm btn-info" href="/admin/skills-evaluation/'.$this->id.'/list"><i class="la la-pie-chart"></i></a>';
+        } else {
+            return null;
+        }
     }
 }
