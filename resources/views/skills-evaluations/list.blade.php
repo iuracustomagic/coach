@@ -41,6 +41,7 @@
                     </h3>
                     <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
                     <h6>Подразделение: <b>{{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
+                    <h6>Населенный пункт: <b>{{$employee->getLocalityName() ? $employee->getLocalityName() : '-'}}</b></h6>
                 </th>
                 @foreach($dates as $date)
                     <th class="date">

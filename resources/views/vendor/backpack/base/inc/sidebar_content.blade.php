@@ -1,5 +1,5 @@
 <!-- This file is used to store sidebar items, starting with Backpack\Base 0.9.0 -->
-<!--li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li-->
+<li class="nav-item"><a class="nav-link" href="{{ backpack_url('dashboard') }}"><i class="la la-home nav-icon"></i> {{ trans('backpack::base.dashboard') }}</a></li>
 @if(backpack_user()->hasRole('SuperAdmin') || backpack_user()->hasRole('Admin') || backpack_user()->hasRole('Manager'))
 
     @if(backpack_user()->can('HandleCompanies') || backpack_user()->can('HandleDivisions') || backpack_user()->can('HandleBranches'))

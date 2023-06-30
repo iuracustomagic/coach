@@ -6,7 +6,7 @@ use App\Http\Requests\ReportRequest;
 use App\Models\Course;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
-use Telegram\Bot\Laravel\Facades\Telegram;
+//use Telegram\Bot\Laravel\Facades\Telegram;
 
 /**
  * Class ReportCrudController
@@ -44,9 +44,9 @@ class ReportCrudController extends CrudController
         $this->crud->removeAllButtons();
 
         $this->crud->enableDetailsRow();
-        $telegram = Telegram::getMe();
-
-        $telegram->addCommand(\App\Telegram\Commands\StartCommand::class);
+//        $telegram = Telegram::getMe();
+//
+//        $telegram->addCommand(\App\Telegram\Commands\StartCommand::class);
 //        $update = Telegram::getUpdates();
 //        $lastKey = array_key_last($update);
 //        $name = $update[$lastKey]['message']['from']['first_name'];
@@ -63,9 +63,9 @@ class ReportCrudController extends CrudController
         $chatId = '1315197985'; // my id
 //        $chatId = '6190451047'; // Coach id
 //        $chatId = '867008520'; // Eugen id
-        $botId = $telegram->getId();
-        $firstName = $telegram->getFirstName();
-        $username = $telegram->getUsername();
+//        $botId = $telegram->getId();
+//        $firstName = $telegram->getFirstName();
+//        $username = $telegram->getUsername();
 //dd($update);
 //        $response = Telegram::getUpdates();
 

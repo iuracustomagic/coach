@@ -101,7 +101,7 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
         $evaluation_values = [];
 
         foreach($employee->skillsEvaluations as $key => $evaluation){ // $employee->monthsEvaluations
-            $date = date('Y-m-d', strtotime($evaluation->created_at));
+            $date = date('d/m/Y  H:i', strtotime($evaluation->created_at));
             $results[$key] = json_decode($evaluation->result);
 
             $dates[] = [

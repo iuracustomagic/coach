@@ -17,7 +17,7 @@ use Telegram\Bot\Laravel\Facades\Telegram;
 /** === **/
 
 Route::redirect('/', '/admin');
-Route::redirect('/admin/dashboard', '/admin/report');
+//Route::redirect('/admin/dashboard', '/admin/report');
 
 Route::get('/admin/evaluation/{employee_id}/start', 'App\Http\Controllers\Admin\EvaluationController@start');
 Route::get('/admin/evaluation/{employee_id}/list', 'App\Http\Controllers\Admin\EvaluationController@list');

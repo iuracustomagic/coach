@@ -114,7 +114,7 @@ class User extends Authenticatable
         return $this->belongsTo('App\Models\Branch', 'branch_id', 'id');
     }*/
 
-    /*public function locality()
+    public function getLocalityName()
     {
         $locality = "";
         if($this->branches->count() > 0){
@@ -123,7 +123,7 @@ class User extends Authenticatable
             }
         }
         return $locality;
-    }*/
+    }
 
     public function branches()
     {
@@ -180,6 +180,10 @@ class User extends Authenticatable
     public function getTotalAvailableAttribute()
     {
         return $this->courses->count();
+    }
+    public function getUsersCount()
+    {
+        return $this->count();
     }
 
     public function getTotalPassedAttribute()
@@ -362,16 +366,16 @@ class User extends Authenticatable
     }
     public function skills_evaluate($crud = false)
     {
-//        if(null != $this->profession && null !== $this->profession->evaluation){
-            return '<a class="btn btn-sm btn-success" href="/admin/skills-evaluation/'.$this->id.'/start"><i class="la la-area-chart"></i></a>';
-//        } else {
-//            return null;
-//        }
+       if( $this->profession !==  null  && $this->profession->name == "Агент"){
+            return '<a class="btn btn-sm btn-outline-success" href="/admin/skills-evaluation/'.$this->id.'/start"><i class="la la-area-chart"></i></a>';
+       } else {
+            return null;
+       }
     }
     public function skills_marks($crud = false)
     {
-        if($this->skillsEvaluations->count()){
-        return '<a class="btn btn-sm btn-info" href="/admin/skills-evaluation/'.$this->id.'/list"><i class="la la-pie-chart"></i></a>';
+        if($this->skillsEvaluations->count() && $this->profession->name == "Агент"){
+        return '<a class="btn btn-sm btn-outline-info" href="/admin/skills-evaluation/'.$this->id.'/list"><i class="la la-pie-chart"></i></a>';
         } else {
             return null;
         }
