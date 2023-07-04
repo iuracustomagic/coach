@@ -49,6 +49,18 @@ class Lesson extends Model
         return $this->hasOne('App\Models\Quiz', 'lesson_id', 'id');
     }
 
+    public function attemptMark()
+    {
+        $attempt = \App\Models\Attempt::where([
+            'quiz_id' => $this->quiz->id,
+            'user_id' => backpack_user()->id,
+            'status' => 'PASSED'
+        ])->orderBy('id', 'DESC')->first();
+
+        return $attempt->mark ? $attempt->mark : 0;
+    }
+
+
     public function passedByUser()
     {
         if($this->quiz === null){
@@ -57,8 +69,8 @@ class Lesson extends Model
         }
 
         $attempt = \App\Models\Attempt::where([
-            'quiz_id' => $this->quiz->id, 
-            'user_id' => backpack_user()->id, 
+            'quiz_id' => $this->quiz->id,
+            'user_id' => backpack_user()->id,
             'status' => 'PASSED'
             ])->first();
         return !empty($attempt) ? true : false;

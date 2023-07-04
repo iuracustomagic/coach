@@ -10,7 +10,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-sm-12">
-		<!-- Default box -->	
+		<!-- Default box -->
 			<div class="card">
 				<div class="card-body row">
 					@if($course)
@@ -48,7 +48,8 @@
 																<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
 															@endif
 														@else
-															<a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.passed') }}</a>
+															<a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.mark') }}{{$lesson->attemptMark()}}</a>
+															<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.try_again') }}</a>
 														@endif
 													</div>
 													@endif
@@ -67,4 +68,4 @@
 			</div>
 		</div>
 	</div>
-@endsection	
+@endsection

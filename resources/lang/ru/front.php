@@ -21,5 +21,6 @@ return [
 	'lessons_list' => 'Список уроков',
 	'next_lesson' => 'Следующий урок',
 	'try_again' => 'Пробовать снова',
-	'course_finished' => 'Курс завершён'
+	'course_finished' => 'Курс завершён',
+	'mark' => 'Оценка: '
 ];

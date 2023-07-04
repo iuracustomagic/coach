@@ -241,10 +241,11 @@
 													<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
 												 @endif
 											 @else
-												<a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.passed') }}</a>
+                                                <a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.mark') }}{{$lesson->attemptMark()}}</a>
+                                                <a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.try_again') }}</a>
 											 @endif
 										@endif
-                                            <a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
+
 									</div>
 								@endif
 							</div>
