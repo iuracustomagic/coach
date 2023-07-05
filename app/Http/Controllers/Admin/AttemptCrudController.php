@@ -21,7 +21,7 @@ class AttemptCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,7 +33,7 @@ class AttemptCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -42,6 +42,7 @@ class AttemptCrudController extends CrudController
         $this->crud->removeAllButtons();
 
         $this->crud->enableDetailsRow();
+        $this->crud->addButtonFromView('top', 'user_results', 'user_results', 'beginning');
 
         /* Get only attempts of current employee */
         if(backpack_user()->hasRole('Employee')){
@@ -94,7 +95,7 @@ class AttemptCrudController extends CrudController
         CRUD::column('course')->limit(30)->label(trans('labels.course'));
 
         CRUD::column('lesson')->limit(30)->label(trans('labels.lesson'));
-        
+
         CRUD::addColumn([
             'name'    => 'status',
             'label'   => trans('labels.status'),
@@ -106,7 +107,7 @@ class AttemptCrudController extends CrudController
                         case 'STARTED':
                             return 'badge badge-info';
                             break;
-                        
+
                         case 'PASSED':
                             return 'badge badge-success';
                             break;
@@ -142,7 +143,7 @@ class AttemptCrudController extends CrudController
         CRUD::column('started')->label(trans('labels.started'));
 
         CRUD::column('finished')->label(trans('labels.finished'));
-		
+
 		/* FILTERS */
         $this->crud->addFilter([
             'name'  => 'locality',
@@ -182,8 +183,8 @@ class AttemptCrudController extends CrudController
           'type'  => 'text',
           'name'  => 'user_id',
           'label' => trans('labels.user')
-        ], 
-        false, 
+        ],
+        false,
         function($value) {
             $users = \App\Models\User::where('name', 'like', '%'.$value.'%')->get('id');
             $this->crud->addClause('whereIn', 'user_id', $users);
@@ -227,13 +228,13 @@ class AttemptCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -253,13 +254,13 @@ class AttemptCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -276,7 +277,7 @@ class AttemptCrudController extends CrudController
 
             $markup = "<table>";
             $markup .= "<tr><th>Вопрос</th><th>Выбранная опция</th><th>Затрачено, сек</th><th>Результат</th></tr>";
-            
+
             foreach($answers as $answer){
                 $markup .= "<tr><td>" . $answer['question'] . "</td><td>";
                 foreach($answer['answer'] as $selectedOption){
@@ -286,7 +287,7 @@ class AttemptCrudController extends CrudController
                 $isTrue = $answer['is_true'] ? '<span class="badge badge-success"><i class="las la-check-square"></i></span>' : '<span class="badge badge-danger"><i class="las la-times-circle"></i></span>';
                 $markup .= "<td>" . $isTrue . "</td></tr>";
             }
-                
+
             $markup .= "</table>";
             return $markup;
         } else {

@@ -6,7 +6,10 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Storage;
 
 use Backpack\CRUD\app\Models\Traits\CrudTrait;
 use Spatie\Permission\Traits\HasRoles;
@@ -32,7 +35,7 @@ class User extends Authenticatable
         'email',
         'password',
         'birthday',
-        //'company_id',
+        'image',
         //'division_id',
         //'branch_id',
         'profession_id',
@@ -378,6 +381,48 @@ class User extends Authenticatable
         return '<a class="btn btn-sm btn-outline-info" href="/admin/skills-evaluation/'.$this->id.'/list"><i class="la la-pie-chart"></i></a>';
         } else {
             return null;
+        }
+    }
+    public function setImageAttribute($value)
+    {
+        $attribute_name = "image";
+
+        $disk = 'profile';
+        // destination path relative to the disk above
+        $destination_path = "app/public/profilePhoto";
+
+
+        // if the image was erased
+        if (empty($value)) {
+            // delete the image from disk
+            if (isset($this->{$attribute_name}) && !empty($this->{$attribute_name})) {
+                Storage::disk($disk)->delete($this->{$attribute_name});
+            }
+            // set null on database column
+            $this->attributes[$attribute_name] = null;
+        }
+
+        // if a base64 was sent, store it in the db
+        if (Str::startsWith($value, 'data:image'))
+        {
+
+            $image = Image::make($value);
+
+
+            $filename = md5($value.time()).'.jpg';
+
+            Storage::disk($disk)->put('/'.$filename, $image->stream());
+
+
+            if (isset($this->{$attribute_name}) && !empty($this->{$attribute_name})) {
+                Storage::disk($disk)->delete($this->{$attribute_name});
+            }
+
+
+            $this->attributes[$attribute_name] = $filename;
+        } elseif (!empty($value)) {
+
+            $this->attributes[$attribute_name] = $this->{$attribute_name};
         }
     }
 }

@@ -3,7 +3,7 @@
 @section('content')
 	<div class="row">
 		<div class="col-sm-12">
-		<!-- Default box -->	
+		<!-- Default box -->
 			<div class="card">
 				<div class="card-body row">
 					@forelse($courses as $course)
@@ -16,9 +16,10 @@
 								@else
 									<img class="card-img-top" src="https://place-hold.it/286x180?text=NO IMAGE" alt="{{$course->name}}">
 								@endif
-								<div class="card-body">
+								<div class="card-body" style="min-height: 100px">
 									<h5 class="card-title">{{$course->name}}</h5>
 									<p class="card-text">{{$course->description}}</p>
+
 								</div>
 								<div class="card-footer">
 									@if($course::finalQuiz($course->id))
@@ -37,4 +38,4 @@
 			</div>
 		</div>
 	</div>
-@endsection	
+@endsection
