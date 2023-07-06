@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\QuizRequest;
+use App\Models\Course;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
 
@@ -64,12 +65,45 @@ class QuizCrudController extends CrudController
             $this->crud->addClause('whereIn', 'course_id', $courses);
         }
 
-        CRUD::column('course_id')->label(trans('labels.course'));
+
+        CRUD::column('course_id')->label(trans('labels.course'))->searchLogic(function ($query, $column, $searchTerm) {
+            $courses = \App\Models\Course::where('name', 'like', '%'.$searchTerm.'%')->get('id');
+            $query->whereIn('course_id', $courses);
+        });
         CRUD::column('lesson_id')->label(trans('labels.lesson'));
         CRUD::column('total_questions')->label(trans('labels.total_questions'));
         CRUD::column('questions_to_show')->label(trans('labels.questions_to_show'));
         CRUD::column('final')->label(trans('labels.is_final'))->escaped(false)->limit(-1);
 
+        /* FILTERS */
+
+        $this->crud->addFilter(
+            [
+                'name'  => 'course',
+                'type'  => 'select2',
+                'label' =>trans('labels.course'),
+            ],
+            function () {
+                return \App\Models\Course::all()->keyBy('id')->pluck('name', 'id')->toArray();
+            },
+            function ($value) { // if the filter is active
+                $this->crud->addClause('where', 'course_id', $value);
+            }
+        );
+
+        $this->crud->addFilter(
+            [
+                'name'  => 'lesson',
+                'type'  => 'select2',
+                'label' =>trans('labels.lesson'),
+            ],
+            function () {
+                return \App\Models\Lesson::all()->keyBy('id')->pluck('name', 'id')->toArray();
+            },
+            function ($value) { // if the filter is active
+                $this->crud->addClause('where', 'lesson_id', $value);
+            }
+        );
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');

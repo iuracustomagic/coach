@@ -75,6 +75,21 @@ class LessonCrudController extends CrudController
         //CRUD::column('created_at');
         //CRUD::column('updated_at');
 
+        /* FILTERS */
+
+        $this->crud->addFilter(
+            [
+                'name'  => 'course',
+                'type'  => 'select2',
+                'label' =>trans('labels.course'),
+            ],
+            function () {
+                return \App\Models\Course::all()->keyBy('id')->pluck('name', 'id')->toArray();
+            },
+            function ($value) { // if the filter is active
+                $this->crud->addClause('where', 'course_id', $value);
+            }
+        );
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
