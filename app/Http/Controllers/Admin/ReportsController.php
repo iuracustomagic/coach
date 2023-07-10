@@ -8,8 +8,15 @@ use App\Models\User;
 use App\Models\EvaluationResult;
 use Illuminate\Http\Request;
 
+
 class ReportsController extends Controller
 {
+    public function setup()
+    {
+
+      CRUD::enableExportButtons();
+    }
+
     public function branchSummary($branch_id){
         $branch = Branch::find($branch_id);
 
@@ -111,7 +118,7 @@ class ReportsController extends Controller
         foreach($hierarchy as $id => $employee){
 
             for($i = 0; $i < $lvl; $i++){
-                $own = $i+1 == $lvl ? "<span class='own o-lvl-".$lvl."'></span>" : "";
+                $own = $i+1 == $lvl ? "<span class=''></span>" : "";
             }
             $marker = "";
             if($employee['final_grade'] <= 6) {
@@ -125,10 +132,10 @@ class ReportsController extends Controller
             }
             $toggler = "<span class='toggler t-lvl-".$lvl." toggle-subordinates' data-subordinates-to='" . $id . "'>+</span>";
             $row = "<tr ".$marker.">";
-            $row .= "<td class='controls'>";
-                $row .= $employee['has_subordinates'] ? $toggler : '';
-                $row .= $own ?? "";
-            $row .= "</td>";
+//            $row .= "<td class='controls not-export-col'>";
+//                $row .= $employee['has_subordinates'] ? $toggler : '';
+//                $row .= $own ?? "";
+//            $row .= "</td>";
             $row .= "<td class='index'>";
                 $row .= $index;
             $row .= "</td>";
@@ -187,11 +194,11 @@ class ReportsController extends Controller
 
             if($employee['has_subordinates']){
                 $subordinates = $this->drawSummaryRows($employee['subordinates'], $lvl + 1,  $index + 1);
-                $rows[] = "<tr class='may-hide hidden' data-supervisor='" . $employee['id'] . "'><td colspan='12'><table class='lvl lvl-".$lvl."'>";
+//                $rows[] = "<tr class='may-hide hidden' data-supervisor='" . $employee['id'] . "'><td >";
                 foreach($subordinates as $subordinate){
                     $rows[] = $subordinate;
                 }
-                $rows[] = "</table></td></tr>";
+//                $rows[] = "</td></tr>";
                 $index += count($subordinates) + 1;
             } else {
                 $index++;
@@ -207,16 +214,16 @@ class ReportsController extends Controller
 
         foreach($hierarchy as $id => $employee){
             for($i = 0; $i < $lvl; $i++){
-                $own = $i+1 == $lvl ? "<span class='own o-lvl-".$lvl."'></span>" : "";
+                $own = $i+1 == $lvl ? "<span class=''></span>" : "";
             }
 
             $toggler = "<span class='toggler t-lvl-".$lvl." toggle-subordinates' data-subordinates-to='" . $id . "'>+</span>";
             $row = "<tr>";
-            $row .= "<td class='controls'>";
-                $row .= $employee['has_subordinates'] ? $toggler : '';
-                $row .= $own ?? "";
-            $row .= "</td>";
-            $row .= "<td class='index'>";
+//            $row .= "<td class='controls not-export-col'>";
+//                $row .= $employee['has_subordinates'] ? $toggler : '';
+//                $row .= $own ?? "";
+//            $row .= "</td>";
+            $row .= "<td class='index not-export-col'>";
                 $row .= $index;
             $row .= "</td>";
             $row .= "<td class='employee'>";
@@ -285,7 +292,7 @@ class ReportsController extends Controller
                 $evaluations[] = [
                     'id' => $evaluation->id,
                     'date' => $evaluation->created_at,
-                    'examiner' => $evaluation->examiner ? $evaluation->examiner->name : '-',
+                    'examiner' => $evaluation->examiner ? $evaluation->examiner->name : '',
                     'mark' => $evaluation->mark
                 ];
             }

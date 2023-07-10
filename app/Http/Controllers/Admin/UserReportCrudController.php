@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Models\Branch;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\PermissionManager\app\Http\Requests\UserStoreCrudRequest as StoreRequest;
 use Backpack\PermissionManager\app\Http\Requests\UserUpdateCrudRequest as UpdateRequest;
@@ -19,7 +20,12 @@ class UserReportCrudController extends CrudController
         $this->crud->setModel(config('backpack.permissionmanager.models.user'));
         $this->crud->setEntityNameStrings(trans('labels.employee'), trans('labels.employees'));
         $this->crud->setRoute(backpack_url('/report/user'));
+        $this->crud->enableExportButtons();
     }
+
+
+
+
 
     public function setupListOperation()
     {

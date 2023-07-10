@@ -7,6 +7,12 @@
         position: absolute;
         top: 50%;
     }
+    table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
     .table td, .table th{
         vertical-align: middle !important;
     }
@@ -150,13 +156,116 @@
             max-width: 600px !important;
         }
     }
+
+    /*------------------------------*/
+    .dt-buttons {
+        display: none;
+    }
+    .pull-left ul,
+    .pull-right ul {
+        list-style: none;
+        margin: 0;
+        padding-left: 0;
+    }
+    .pull-left a,
+    .pull-right a{
+        text-decoration: none;
+        color: #ffffff;
+    }
+    .pull-left li,
+    .pull-right li{
+        color: #ffffff;
+        background-color: #456e9a;
+        border-color: #456e9a;
+        display: block;
+        float: left;
+        position: relative;
+        text-decoration: none;
+        transition-duration: 0.5s;
+        padding: 10px 30px;
+        font-size: .75rem;
+        font-weight: 400;
+        line-height: 1.428571;
+    }
+    .pull-left li:hover,
+    .pull-right li:hover {
+        cursor: pointer;
+        color: #00bb00;
+    }
+    .pull-left li a:hover,
+    .pull-right li a:hover {
+        color: #00bb00;
+    }
+    .pull-left ul li ul {
+        visibility: hidden;
+        opacity: 0;
+        min-width: 8.2rem;
+        position: absolute;
+
+        transition: all 0.5s ease;
+        margin-top: 8px;
+        left: 0;
+        bottom: 34px;
+        display: none;
+    }
+    .pull-right ul li ul {
+        visibility: hidden;
+        opacity: 0;
+        min-width: 10.2rem;
+        position: absolute;
+        z-index: 1000;
+        transition: all 0.5s ease;
+        margin-top: 8px;
+        left: 0;
+        bottom: 34px;
+        display: none;
+    }
+    .pull-left ul li:hover>ul,
+    .pull-left ul li ul:hover,
+    .pull-right ul li:hover>ul {
+        visibility: visible;
+        opacity: 1;
+        display: block;
+    }
+    .pull-left ul li ul li,
+    .pull-right ul li ul li  {
+        clear: both;
+        width: 100%;
+        color: #ffffff;
+    }
+
+    .ul-choose li.not-export-col {
+        background-color: white;
+        color: #0e111c;
+    }
+    .ul-dropdown {
+        margin: 0.3125rem 1px !important;
+        outline: 0;
+    }
+    .firstli {
+        border-radius: 0.2rem;
+        margin-bottom: 20px;
+        margin-right: 25px;
+    }
+    .firstli i {
+        position: relative;
+        display: inline-block;
+        top: 0;
+        margin-top: -1.1em;
+        margin-bottom: -1em;
+        font-size: 0.8rem;
+        vertical-align: middle;
+        margin-right: 5px;
+    }
 </style>
+
 @section('content')
-    <table class="bg-white table table-striped nowrap rounded">
+<div class="table_container">
+    <table class="bg-white table table-striped nowrap rounded" id="crudTable" >
         <thead>
             <tr>
-                <th class="controls"></th>
-                <th>№</th>
+{{--                <th class="controls not-export-col">1</th>--}}
+                <th class="">№</th>
                 <th>Должность</th>
                 <th>Сотрудник</th>
                 <th>Дата регистрации</th>
@@ -170,11 +279,54 @@
             </tr>
         </thead>
         <tbody>
+
             @foreach($rows as $row)
                 {!! $row !!}
             @endforeach
+
         </tbody>
-    <table>
+    </table>
+</div>
+        <div id="bottom_buttons" class="d-print-none text-center text-sm-left">
+            <div class="pull-left">
+
+                    <ul class="ul-dropdown">
+                        <li class="firstli">
+                            <i class="la la-download"></i><a href="#">Экспорт</a>
+                            <ul class="ul-export">
+                                <li>Export CSV</li>
+                                <li>Export Excel</li>
+                                <li>Export PDF</li>
+                                <li>Print</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+            </div>
+            <div class="pull-right">
+
+                    <ul class="ul-dropdown">
+                        <li class="secondli">
+                            <i class="la la-eye-slash mr-2"></i><a href="#">Видимость колонок</a>
+                            <ul class="ul-choose">
+                                <li data-id="0">№</li>
+                                <li data-id="1">Должность</li>
+                                <li data-id="2">Сотрудник</li>
+                                <li data-id="3">Дата регистрации</li>
+                                <li data-id="4">Курсов (доступно)</li>
+                                <li data-id="5">Курсов (пройдено)</li>
+                                <li data-id="6">Теория (ср. балл)</li>
+                                <li data-id="7">Оценочные листы</li>
+                                <li data-id="8">Подчинённые (ср. балл)</li>
+                                <li data-id="9">Итоговая</li>
+                                <li data-id="10">Куратор</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+            </div>
+        </div>
+
 @endsection
 
 <!-- Modal -->
@@ -197,9 +349,111 @@
     </div>
 </div>
 
+    @section('after_styles')
+        <!-- DATA TABLES -->
+            <link rel="stylesheet" type="text/css" href="{{ asset('packages/datatables.net-bs4/css/dataTables.bootstrap4.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('packages/datatables.net-fixedheader-bs4/css/fixedHeader.bootstrap4.min.css') }}">
+            <link rel="stylesheet" type="text/css" href="{{ asset('packages/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css') }}">
+
+            <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/crud.css').'?v='.config('backpack.base.cachebusting_string') }}">
+            <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/form.css').'?v='.config('backpack.base.cachebusting_string') }}">
+{{--            <link rel="stylesheet" href="{{ asset('packages/backpack/crud/css/list.css').'?v='.config('backpack.base.cachebusting_string') }}">--}}
+
+            <!-- CRUD LIST CONTENT - crud_list_styles stack -->
+        @stack('crud_list_styles')
+    @endsection
+
 @push('after_scripts')
+
+
+    <!-- DataTable -->
+        <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/dataTables.buttons.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.flash.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.html5.min.js" type="text/javascript"></script>
+        <script src="https://cdn.datatables.net/buttons/1.6.5/js/buttons.print.min.js" type="text/javascript"></script>
+
+
+
+
 <script>
-    jQuery(document).ready(function($) {
+    $(document).ready(function($) {
+        $(".ul-export li").click(function() {
+            var i = $(this).index() + 1
+            var table = $('#crudTable').DataTable();
+            if (i == 1) {
+                table.button('.buttons-csv').trigger();
+            } else if (i == 2) {
+                table.button('.buttons-excel').trigger();
+            } else if (i == 3) {
+                table.button('.buttons-pdf').trigger();
+            } else if (i == 4) {
+                table.button('.buttons-print').trigger();
+            }
+        });
+
+        $(".ul-choose li").click(function() {
+            $( this ).toggleClass( "not-export-col" );
+            const text =  $( this ).text();
+            const id =  $( this ).data( "id" );
+            $('#crudTable thead tr:first').each(function() {
+
+                $(this).find("th").eq(id).toggleClass( "not-export-col" );
+                // console.log(customerId)
+                // if(customerId === text) {
+                //
+                // }
+
+            });
+
+        });
+        $('.table_container').css({'min-height': '500px'})
+        $('#crudTable').DataTable({
+            dom: "Blfrtip",
+            text: '<i class="la la-download"></i> {{ trans('backpack::crud.export.export') }}',
+            // dropup: true,
+            buttons: [
+                {
+                    text: 'csv',
+                    extend: 'csvHtml5',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    text: 'excel',
+                    extend: 'excelHtml5',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    text: 'pdf',
+                    extend: 'pdfHtml5',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+                {
+                    text: 'print',
+                    extend: 'print',
+                    exportOptions: {
+                        columns: ':visible:not(.not-export-col)'
+                    }
+                },
+            ],
+            columnDefs: [{
+                orderable: false,
+                targets: -1
+            }]
+
+        });
+
+
         $('.toggler').on('click', function(e){
             let $this = $(this),
                 supervisor = $this.data('subordinates-to'),
