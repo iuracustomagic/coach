@@ -17,3 +17,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/auth/login', '\App\Http\Controllers\Api\AuthController@login');
+Route::get('/unauthorized', '\App\Http\Controllers\Api\AuthController@unauthorized');
+
+Route::middleware('auth:api')->get('/ping', '\App\Http\Controllers\Api\AuthController@ping');
+Route::middleware('auth:api')->get('/pre-sync', '\App\Http\Controllers\Api\AuthController@preSync');

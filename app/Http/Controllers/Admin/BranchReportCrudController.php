@@ -21,7 +21,7 @@ class BranchReportCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
@@ -33,7 +33,7 @@ class BranchReportCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -46,7 +46,7 @@ class BranchReportCrudController extends CrudController
 
         $this->crud->addButtonFromModelFunction('line', 'reportSummary', 'reportSummary', 'beginning');
         $this->crud->addButtonFromModelFunction('line', 'reportEvaluations', 'reportEvaluations', 'beginning');
-       
+
         CRUD::column('company_id')->label(trans('labels.company'));
         CRUD::column('division_id')->label(trans('labels.division'));
         CRUD::column('name')->label(trans('labels.name'));
@@ -67,7 +67,7 @@ class BranchReportCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
@@ -87,7 +87,7 @@ class BranchReportCrudController extends CrudController
                                 'passed_sum' => 0,
                                 'passed_qty' => 0,
                                 'total_sum' => 0,
-                                'total_qty' => 0 
+                                'total_qty' => 0
                             ];
                         } else {
                             $courses[$course->id]['employees'] += 1;
@@ -110,34 +110,10 @@ class BranchReportCrudController extends CrudController
                         }
                     }
                 }
-                //var_dump($employee->reports[0]);
+
             }
         }
-        /*$courses = [];
-        if($branch->employees->count() > 0){
-            foreach($branch->employees as $employee){
-                if($employee->courses->count() > 0){
-                    foreach($employee->courses as $course){
-                        if(!isset($courses[$course->id])){
-                            $courses[$course->id] = [
-                                'name' => $course->name,
-                                'employees' => 1,
-                                'attempts' => 0
-                            ];
-                        } else {
-                            $courses[$course->id]['employees'] += 1;
-                        }
 
-                        $quizzes = \App\Models\Quiz::where('course_id', $course->id)->get()->pluck('id')->toArray();
-                        //var_dump($quizzes);
-                        $attempts = \App\Models\Attempt::where('user_id', $employee->id)->whereIn('quiz_id', $quizzes)->first();
-                        if(!empty($attempts)){
-                            $courses[$course->id]['attempts'] += 1;
-                        }
-                    }
-                }
-            }
-        }*/
 
         $markup = "<table class='table table-striped table-hover'>";
         if(!empty($courses)){
@@ -170,50 +146,6 @@ class BranchReportCrudController extends CrudController
         }
         $markup .= "</table>";
         return $markup;
-        //$quizzes = \App\Models\Quiz::where('course_id', $course->id)->get()->pluck('id')->toArray();
-        /*$branch = \App\Models\Branch::find($id);
-        if($branch->employees->count() > 0){
-            $results = [];
-            $markup = "<div class='container-fluid'><div class='row'>";
-            foreach($branch->employees as $employee){
-                $markup .= "<div class='card col-md-3'>";
-                $markup .= "<h5>" . $employee->name . "</h5>";
-                $markup .= "<h6>" . $employee->personal_phone . "</h6>";
-                $markup .= "<h6>" . $employee->business_phone . "</h6>";
-                $results[$employee->id] = [
-                    'name' => $employee->name,
-                    'phone_p' => $employee->personal_phone,
-                    'phone_b' => $employee->business_phone,
-                    'totalCourses' => $employee->courses->count(),
-                    'passed' => 0, 
-                    'failed' => 0
-                ];
-                if($employee->courses->count() > 0){
-                    foreach($employee->courses as $course){
-                        $results[$employee->id]['courses'][$course->id]['name'] = $course->name;
-                        $markup .= "<p>" . $course->name . "</p>";
-                        if($course->lessons->count() > 0){
-                            foreach($course->lessons as $lesson){
-                                $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['name'] = $lesson->name;
-                                $markup .= "<p>--" . $lesson->name . "</p>";
-                                if(null != $lesson->quiz){
-                                    $report = \App\Models\Report::where(['quiz_id' => $lesson->quiz->id, 'user_id' => $employee->id])->first();
-                                    if(!empty($report)){
-                                        $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = $report->passed;
-                                    } else {
-                                        $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = null;
-                                    } 
-                                } else {
-                                    $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = null;
-                                }
-                            }
-                        }
-                    } 
-                }
-                $markup .= "</div>";
-            }
-            $markup .= "</div></div>";
-            return $markup;
-        }*/
+
     }
 }

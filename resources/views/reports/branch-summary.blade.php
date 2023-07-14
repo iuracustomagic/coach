@@ -12,12 +12,25 @@
         overflow-x: auto;
         white-space: nowrap;
     }
+    .table_container {
+        position: relative;
 
+    }
+    .evaluation_title {
+        position: absolute;
+        top: 45px;
+        left: 0;
+        color: #366a8d;
+        font-style: italic;
+    }
     .table td, .table th{
         vertical-align: middle !important;
     }
-    .table td table {
-        width: 100%;
+    .table tr th.not-export-col {
+       display: none;
+    }
+    .table tr td.not-export-col {
+        display: none;
     }
     .toggler{
         display: block;
@@ -261,6 +274,8 @@
 
 @section('content')
 <div class="table_container">
+    <h3 class="evaluation_title"></h3>
+
     <table class="bg-white table table-striped nowrap rounded" id="crudTable" >
         <thead>
             <tr>
@@ -382,6 +397,8 @@
 
 <script>
     $(document).ready(function($) {
+
+        $(".evaluation_title").text('{!! $title !!}')
         $(".ul-export li").click(function() {
             var i = $(this).index() + 1
             var table = $('#crudTable').DataTable();
@@ -403,10 +420,11 @@
             $('#crudTable thead tr:first').each(function() {
 
                 $(this).find("th").eq(id).toggleClass( "not-export-col" );
-                // console.log(customerId)
-                // if(customerId === text) {
-                //
-                // }
+
+            });
+            $('#crudTable tbody tr').each(function() {
+
+                $(this).find("td").eq(id).toggleClass( "not-export-col" );
 
             });
 
@@ -414,12 +432,24 @@
         $('.table_container').css({'min-height': '500px'})
         $('#crudTable').DataTable({
             dom: "Blfrtip",
-            text: '<i class="la la-download"></i> {{ trans('backpack::crud.export.export') }}',
+            "language": {
+                "lengthMenu": "_MENU_  записей на странице",
+                "info": "Показано _START_ до _END_ из _TOTAL_ совпадений",
+                "search": "Поиск:",
+                "paginate": {
+                    "first":      "First",
+                    "last":       "Last",
+                    "next":       ">",
+                    "previous":   "<"
+                },
+            },
+
             // dropup: true,
             buttons: [
                 {
                     text: 'csv',
                     extend: 'csvHtml5',
+                    messageTop: '{{$title}}',
                     exportOptions: {
                         columns: ':visible:not(.not-export-col)'
                     }
@@ -427,6 +457,7 @@
                 {
                     text: 'excel',
                     extend: 'excelHtml5',
+                    messageTop: '{{$title}}',
                     exportOptions: {
                         columns: ':visible:not(.not-export-col)'
                     }
@@ -434,6 +465,7 @@
                 {
                     text: 'pdf',
                     extend: 'pdfHtml5',
+                    messageTop: '{{$title}}',
                     exportOptions: {
                         columns: ':visible:not(.not-export-col)'
                     }
@@ -441,15 +473,16 @@
                 {
                     text: 'print',
                     extend: 'print',
+                    messageTop: '{{$title}}',
                     exportOptions: {
                         columns: ':visible:not(.not-export-col)'
                     }
                 },
             ],
-            columnDefs: [{
-                orderable: false,
-                targets: -1
-            }]
+            // columnDefs: [{
+            //     orderable: false,
+            //     targets: -1
+            // }]
 
         });
 

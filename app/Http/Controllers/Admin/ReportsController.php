@@ -14,7 +14,7 @@ class ReportsController extends Controller
     public function setup()
     {
 
-      CRUD::enableExportButtons();
+        CRUD::enableExportButtons();
     }
 
     public function branchSummary($branch_id){
@@ -23,7 +23,8 @@ class ReportsController extends Controller
         $hierarchy = $this->buildSummaryHierarchy($branch->activeEmployees);
         $rows = $this->drawSummaryRows($hierarchy);
         return view('reports/branch-summary', [
-            'rows' => $rows
+            'rows' => $rows,
+            'title' => $branch->name
         ]);
     }
 
@@ -38,7 +39,8 @@ class ReportsController extends Controller
                 'from' => $from,
                 'to' => $to
             ],
-            'rows' => $rows
+            'rows' => $rows,
+            'title' => $branch->name
         ]);
     }
 
@@ -137,33 +139,33 @@ class ReportsController extends Controller
 //                $row .= $own ?? "";
 //            $row .= "</td>";
             $row .= "<td class='index'>";
-                $row .= $index;
+            $row .= $index;
             $row .= "</td>";
             $row .= "<td class='prof'>";
-                if($employee['leader']){
-                    $row .= "<b>" . $employee['proffession'] . "</b>";
-                } else {
-                    $row .= $employee['proffession'];
-                }
+            if($employee['leader']){
+                $row .= "<b>" . $employee['proffession'] . "</b>";
+            } else {
+                $row .= $employee['proffession'];
+            }
             $row .= "</td>";
             $row .= "<td class='employee'>";
-                if($employee['leader']){
-                    $row .= "<b>" . $employee['name'] . "</b>";
-                } else {
-                    $row .= $employee['name'];
-                }
+            if($employee['leader']){
+                $row .= "<b>" . $employee['name'] . "</b>";
+            } else {
+                $row .= $employee['name'];
+            }
             $row .="</td>";
             $row .= "<td class='date'>";
-                $row .= $employee['registered'];
+            $row .= $employee['registered'];
             $row .="</td>";
             $row .= "<td class='available'>";
-                $row .= $employee['theory_available'];
+            $row .= $employee['theory_available'];
             $row .="</td>";
             $row .= "<td class='passed'>";
-                $row .= $employee['theory_passed'];
+            $row .= $employee['theory_passed'];
             $row .="</td>";
             $row .= "<td class='avg'>";
-                $row .= $employee['theory_avg'];
+            $row .= $employee['theory_avg'];
             $row .="</td>";
             $row .= "<td class='ev-list'><div style='display: flex; justify-content: center'>";
 
@@ -179,13 +181,13 @@ class ReportsController extends Controller
 
             $row .="</td>";
             $row .= "<td class='avg'>";
-                $row .= $employee['subordinates_avg'];
+            $row .= $employee['subordinates_avg'];
             $row .="</td>";
             $row .= "<td class='res'>";
-                $row .= $employee['final_grade'];
+            $row .= $employee['final_grade'];
             $row .="</td>";
             $row .= "<td class='supervisor'>";
-                $row .= $employee['supervisor'];
+            $row .= $employee['supervisor'];
             $row .="</td>";
 
             $row .= "</tr>";
@@ -224,46 +226,49 @@ class ReportsController extends Controller
 //                $row .= $own ?? "";
 //            $row .= "</td>";
             $row .= "<td class='index not-export-col'>";
-                $row .= $index;
+            $row .= $index;
             $row .= "</td>";
             $row .= "<td class='employee'>";
-                if($employee['leader']){
-                    $row .= "<b>" . $employee['name'] . "</b>";
-                } else {
-                    $row .= $employee['name'];
-                }
+            if($employee['leader']){
+                $row .= "<b>" . $employee['name'] . "</b>";
+            } else {
+                $row .= $employee['name'];
+            }
             $row .="</td>";
             $row .= "<td class='prof'>";
-                if($employee['leader']){
-                    $row .= "<b>" . $employee['proffession'] . "</b>";
-                } else {
-                    $row .= $employee['proffession'];
-                }
+            if($employee['leader']){
+                $row .= "<b>" . $employee['proffession'] . "</b>";
+            } else {
+                $row .= $employee['proffession'];
+            }
             $row .= "</td>";
-                $row .= "<td class='supervisor'>";
-                $row .= $employee['supervisor'];
+            $row .= "<td class='supervisor'>";
+            $row .= $employee['supervisor'];
             $row .="</td>";
             $row .= "<td class='ev-list'>";
-                if(!empty($employee['evaluations'])){
-                    $row .= "<table>";
-                        $row .= "<tr>";
-                        $row .= "<th>";
-                            $row .= "<p>Дата: </p>";
-                            $row .= "<p>Оценивал: </p>";
-                            $row .= "<p>Баллов: </p>";
-                            $row .= "<p>Оценка: </p>";
-                        $row .= "</th>";
-                            foreach($employee['evaluations'] as $evaluation){
-                                $row .= "<td>";
-                                    $row .= "<p><a href='/admin/evaluation/view/".$evaluation['id']."' target='_blank'>" . $evaluation['date'] . "</a></p>";
-                                    $row .= "<p>" . $evaluation['examiner'] . "</p>";
-                                    $row .= "<p>" . $evaluation['points'] . "</p>";
-                                    $row .= "<p>" . $evaluation['mark'] . "</p>";
-                                $row .= "</td>";
-                            }
-                        $row .= "</tr>";
-                    $row .= "</table>";
+            if(!empty($employee['evaluations'])){
+                $row .= "<div class='d-flex evaluations_container' >";
+                $row .= "<div class='mr-3'>";
+//                $row .= "<th>";
+                $row .= "<p>Дата: </p>";
+                $row .= "<p>Оценивал: </p>";
+                $row .= "<p>Баллов: </p>";
+                $row .= "<p>Оценка: </p>";
+                $row .= "</div>";
+                foreach($employee['evaluations'] as $evaluation){
+//                    $row .= "<td>";
+                    $row .= "<div class='mr-3'>";
+                    $row .= "<p><a href='/admin/evaluation/view/".$evaluation['id']."' target='_blank'>" . $evaluation['date'] . "</a></p>";
+                    $row .= "<p>" . $evaluation['examiner'] . "</p>";
+                    $row .= "<p>" . $evaluation['points'] . "</p>";
+                    $row .= "<p>" . $evaluation['mark'] . "</p>";
+                    $row .= "</div>";
+//                    $row .= "</div>";
                 }
+             $row .= "</div>";
+//                $row .= "</table>";
+            } else
+                $row .= "<p>-</p>";
             $row .="</td>";
             $row .= "</tr>";
 
@@ -271,11 +276,11 @@ class ReportsController extends Controller
 
             if($employee['has_subordinates']){
                 $subordinates = $this->drawEvaluationsRows($employee['subordinates'], $lvl + 1,  $index + 1);
-                $rows[] = "<tr class='may-hide hidden' data-supervisor='" . $employee['id'] . "'><td colspan='12'><table class='lvl lvl-".$lvl."'>";
+//                $rows[] = "<tr class='may-hide hidden' data-supervisor='" . $employee['id'] . "'><td colspan='12'><table class='lvl lvl-".$lvl."'>";
                 foreach($subordinates as $subordinate){
                     $rows[] = $subordinate;
                 }
-                $rows[] = "</table></td></tr>";
+//                $rows[] = "</table></td></tr>";
                 $index += count($subordinates) + 1;
             } else {
                 $index++;
@@ -299,38 +304,38 @@ class ReportsController extends Controller
         }
         if(!empty($evaluations)){
             $table = "<table class='table table-stripped'>";
-                $table .= "<tr>";
-                    $table .= "<th>Дата</th>";
-                    foreach($evaluations as $evaluation){
-                        $table .= "<td>";
-                            $table .= date('Y-m-d',strtotime($evaluation['date']));
-                        $table .= "</td>";
-                    }
-                $table .= "</tr>";
-                $table .= "<tr>";
-                    $table .= "<th>Оценивал</th>";
-                    foreach($evaluations as $evaluation){
-                        $table .= "<td>";
-                            $table .= $evaluation['examiner'];
-                        $table .= "</td>";
-                    }
-                $table .= "</tr>";
-                $table .= "<tr>";
-                    $table .= "<th>Оценка</th>";
-                    foreach($evaluations as $evaluation){
-                        $table .= "<td>";
-                            $table .= $evaluation['mark'];
-                        $table .= "</td>";
-                    }
-                $table .= "</tr>";
-                $table .= "<tr>";
-                    $table .= "<th></th>";
-                    foreach($evaluations as $evaluation){
-                        $table .= "<td>";
-                            $table .= "<a href='/admin/evaluation/view/".$evaluation['id']."' target='_blank'>Подробнее</a>";
-                        $table .= "</td>";
-                    }
-                $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Дата</th>";
+            foreach($evaluations as $evaluation){
+                $table .= "<td>";
+                $table .= date('Y-m-d',strtotime($evaluation['date']));
+                $table .= "</td>";
+            }
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Оценивал</th>";
+            foreach($evaluations as $evaluation){
+                $table .= "<td>";
+                $table .= $evaluation['examiner'];
+                $table .= "</td>";
+            }
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th>Оценка</th>";
+            foreach($evaluations as $evaluation){
+                $table .= "<td>";
+                $table .= $evaluation['mark'];
+                $table .= "</td>";
+            }
+            $table .= "</tr>";
+            $table .= "<tr>";
+            $table .= "<th></th>";
+            foreach($evaluations as $evaluation){
+                $table .= "<td>";
+                $table .= "<a href='/admin/evaluation/view/".$evaluation['id']."' target='_blank'>Подробнее</a>";
+                $table .= "</td>";
+            }
+            $table .= "</tr>";
             $table .= "</table>";
         } else {
             $table = "Нет доступных оценочных листов";
