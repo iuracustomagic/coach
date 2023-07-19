@@ -13,5 +13,6 @@ class VerifyCsrfToken extends Middleware
      */
     protected $except = [
        'k11W9q7^OETVqUQrn/webhook',
+        '/api/auth/login',
     ];
 }

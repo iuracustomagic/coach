@@ -14,40 +14,43 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-//        if (method_exists($this, 'hasTooManyLoginAttempts') &&
-//            $this->hasTooManyLoginAttempts($request)) {
-//            $this->fireLockoutEvent($request);
-//
-//            return $this->sendLockoutResponse($request);
-//        }
         $credentials = $request->only('personal_phone', 'password');
 //        if($this->guard()->attempt($this->credentials($request))){
         if(Auth::attempt($credentials)){
 
-            $this->clearLoginAttempts($request);
-
+            $token = \Illuminate\Support\Str::random(60);
             $this->guard()->user()->forceFill([
-                'remember_token' => \Illuminate\Support\Str::random(60),
+                'api_token' => $token,
             ])->save();
 
             return response()->json([
                 'status' => 'ok',
-                'token' => $this->guard()->user()->remember_token
+                'token' => $token
             ], 200);
         }
 
-        $this->incrementLoginAttempts($request);
 
         return response()->json([
             'status' => 'error'
         ], 401);
     }
 
+
+    public function logout(Request $request) {
+        $this->guard()->user()->forceFill([
+            'api_token' => '',
+        ])->save();
+        return response()->json([
+            'status' => 'ok',
+        ], 204);
+    }
+
+
 	public function ping()
     {
         return response()->json([
             'status' => 'ok',
-            'token' => auth()->user()->remember_token
+            'token' => auth()->user()->api_token
         ], 200);
     }
 

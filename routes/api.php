@@ -19,7 +19,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('/auth/login', '\App\Http\Controllers\Api\AuthController@login');
-Route::get('/unauthorized', '\App\Http\Controllers\Api\AuthController@unauthorized');
 
-Route::middleware('auth:api')->get('/ping', '\App\Http\Controllers\Api\AuthController@ping');
-Route::middleware('auth:api')->get('/pre-sync', '\App\Http\Controllers\Api\AuthController@preSync');
+Route::middleware('auth:api')->get('/logout', '\App\Http\Controllers\Api\AuthController@logout');
+
+Route::middleware('auth:api')->get('/user-info', '\App\Http\Controllers\Api\mobile\UserInfoController@index');
+Route::middleware('auth:api')->get('/courses', '\App\Http\Controllers\Api\mobile\CourseInfoController@list');
+Route::middleware('auth:api')->get('/reports', '\App\Http\Controllers\Api\mobile\ReportInfoController@list');
