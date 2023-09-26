@@ -47,7 +47,7 @@
 															@if($lesson->prevPassedByUser())
 																<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-primary">{{ trans('front.start_quiz') }}</a>
 															@endif
-														@else
+														        @else
 															<a href="javascript:void(0)" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.mark') }}{{$lesson->attemptMark()}}</a>
 															<a href="/quizzes/start-quiz/{{$lesson->quiz->id}}" class="btn btn-success"><i class="nav-icon la la-check"></i> {{ trans('front.try_again') }}</a>
 														@endif

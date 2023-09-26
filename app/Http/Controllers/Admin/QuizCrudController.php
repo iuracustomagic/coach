@@ -28,6 +28,13 @@ class QuizCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('HandleLessons')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+            $this->crud->denyAccess('clone');
+        }
+
         CRUD::setModel(\App\Models\Quiz::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/quiz');
         CRUD::setEntityNameStrings(trans('nav.quizz'), trans('nav.quizzes'));

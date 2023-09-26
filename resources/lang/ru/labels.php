@@ -86,5 +86,10 @@ return [
 	'supervisor' => 'Руководитель',
 	'supervisor_for_employee' => 'Укажите непосредственного начальника сотрудника',
 	'skill_name' => 'Название навыка',
-
+	'quizzes_passed' => 'Тестов пройдено',
+	'courses_passed' => 'Курсов пройдено',
+    'lessons_passed' => 'Уроков пройдено',
+    'avg' => 'Средняя оценка',
+    'first_name' => 'Имя Фамилия',
+    'role' => 'Роль',
 ];

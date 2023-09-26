@@ -21,11 +21,17 @@ class BranchCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
     {
+        if(!backpack_user()->can('HandleBranches')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+        }
+
         CRUD::setModel(\App\Models\Branch::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/branch');
         CRUD::setEntityNameStrings(trans('nav.branch'), trans('nav.branches'));
@@ -33,7 +39,7 @@ class BranchCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -45,7 +51,7 @@ class BranchCrudController extends CrudController
         }
 
         //$this->crud->enableDetailsRow();
-       
+
         CRUD::column('company_id')->label(trans('labels.company'));
         CRUD::column('division_id')->label(trans('labels.division'));
         CRUD::column('name')->label(trans('labels.name'));
@@ -56,13 +62,13 @@ class BranchCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -156,13 +162,13 @@ class BranchCrudController extends CrudController
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -188,7 +194,7 @@ class BranchCrudController extends CrudController
                     'phone_p' => $employee->personal_phone,
                     'phone_b' => $employee->business_phone,
                     'totalCourses' => $employee->courses->count(),
-                    'passed' => 0, 
+                    'passed' => 0,
                     'failed' => 0
                 ];
                 if($employee->courses->count() > 0){
@@ -205,13 +211,13 @@ class BranchCrudController extends CrudController
                                         $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = $report->passed;
                                     } else {
                                         $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = null;
-                                    } 
+                                    }
                                 } else {
                                     $results[$employee->id]['courses'][$course->id]['lessons'][$lesson->id]['passed'] = null;
                                 }
                             }
                         }
-                    } 
+                    }
                 }
                 $markup .= "</div>";
             }

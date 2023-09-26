@@ -21,7 +21,16 @@ class ReportsController extends Controller
         $branch = Branch::find($branch_id);
 
         $hierarchy = $this->buildSummaryHierarchy($branch->activeEmployees);
+
+
         $rows = $this->drawSummaryRows($hierarchy);
+
+//        if(backpack_user()->name == 'Webmaster') {
+//            dump("hierarchy", $hierarchy);
+//            dump("rows", $rows);
+//        };
+
+
         return view('reports/branch-summary', [
             'rows' => $rows,
             'title' => $branch->name

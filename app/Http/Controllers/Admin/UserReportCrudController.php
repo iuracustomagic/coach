@@ -74,7 +74,7 @@ class UserReportCrudController extends CrudController
         $this->crud->addColumns([
             [
                 'name'  => 'name',
-                'label' => trans('backpack::permissionmanager.name'),
+                'label' => trans('labels.first_name'),
                 'type'  => 'text',
             ],
             [

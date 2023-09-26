@@ -24,4 +24,5 @@ Route::middleware('auth:api')->get('/logout', '\App\Http\Controllers\Api\AuthCon
 
 Route::middleware('auth:api')->get('/user-info', '\App\Http\Controllers\Api\mobile\UserInfoController@index');
 Route::middleware('auth:api')->get('/courses', '\App\Http\Controllers\Api\mobile\CourseInfoController@list');
+Route::middleware('auth:api')->get('/courses/course/{course_id}', '\App\Http\Controllers\Api\mobile\CourseInfoController@view');
 Route::middleware('auth:api')->get('/reports', '\App\Http\Controllers\Api\mobile\ReportInfoController@list');

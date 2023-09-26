@@ -212,8 +212,10 @@ class User extends Authenticatable
             foreach($this->courses as $course){
                 $available[] = $course->id;
             }
+            return $this->results->count() > 0 ? round($this->results->where('course_is_passed', 1)->whereIn('course_id', $available)->sum('avg_mark') / count($available), 2) : 0;
         }
-        return $this->results->count() > 0 ? round($this->results->where('course_is_passed', 1)->whereIn('course_id', $available)->sum('avg_mark') / count($available), 2) : 0;
+        return 0;
+//        return $this->results->count() > 0 ? round($this->results->where('course_is_passed', 1)->whereIn('course_id', $available)->sum('avg_mark') / count($available), 2) : 0;
     }
 
     public function getLastActivityAttribute()

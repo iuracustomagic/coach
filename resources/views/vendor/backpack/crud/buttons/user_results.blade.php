@@ -59,12 +59,12 @@
             <div class="card text-white bg-primary">
                 <div class="card-body">
                     <div class="h1 text-muted text-right mb-1"><i class="la la-book"></i></div>
-                    <div class="text-value">{{$courseCount}}</div><span class="text-muted text-uppercase font-weight-bold">Курсов</span>
+                    <div class="text-value">{{$courseCount}}</div><span class="text-muted text-uppercase font-weight-bold">{{ trans('labels.total_courses') }}</span>
                     <div class="progress progress-white progress-xs mt-3">
                         <div class="progress-bar" role="progressbar" style="width: {{$coursePercent}}%" aria-valuenow="{{$coursePercent}}" aria-valuemin="0" aria-valuemax="100"></div>
 
                     </div>
-                    <div class="text-muted mt-2">Курсов пройдено: {{$coursePassed}}</div>
+                    <div class="text-muted mt-2">{{ trans('labels.courses_passed') }}: {{$coursePassed}}</div>
         </div>
         </div>
         </div>
@@ -73,11 +73,11 @@
             <div class="card text-white bg-danger">
                 <div class="card-body">
                     <div class="h1 text-muted text-right mb-1"><i class="la la-book-open"></i></div>
-                    <div class="text-value">{{$lessonsCount}}</div><span class="text-muted text-uppercase font-weight-bold">Уроков</span>
+                    <div class="text-value">{{$lessonsCount}}</div><span class="text-muted text-uppercase font-weight-bold">{{ trans('nav.lessons') }}</span>
                     <div class="progress progress-white progress-xs mt-3">
                         <div class="progress-bar" role="progressbar" style="width: {{$lessonPercent}}%" aria-valuenow="{{$lessonPercent}}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="text-muted mt-2">Уроков пройдено: {{$lessonsPassed}}</div>
+                    <div class="text-muted mt-2">{{ trans('labels.lessons_passed') }}: {{$lessonsPassed}}</div>
                 </div>
             </div>
         </div>
@@ -86,11 +86,11 @@
             <div class="card text-white bg-info">
                 <div class="card-body">
                     <div class="h1 text-muted text-right mb-1"><i class="la la-question"></i></div>
-                    <div class="text-value">{{$quizPassed}}</div><span class="text-muted text-uppercase font-weight-bold">Тестов пройдено</span>
+                    <div class="text-value">{{$quizPassed}}</div><span class="text-muted text-uppercase font-weight-bold">{{ trans('labels.quizzes_passed') }}</span>
                     <div class="progress progress-white progress-xs mt-3">
                         <div class="progress-bar" role="progressbar" style="width: {{$quizPercent}}%" aria-valuenow="{{$quizPercent}}" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
-                    <div class="text-muted mt-2">Средняя оценка: {{$avgMark}}</div>
+                    <div class="text-muted mt-2">{{ trans('labels.avg') }}: {{$avgMark}}</div>
                 </div>
             </div>
         </div>

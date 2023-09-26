@@ -25,11 +25,18 @@ class EvaluationPaperCrudController extends CrudController
 
     /**
      * Configure the CrudPanel object. Apply settings to all operations.
-     * 
+     *
      * @return void
      */
     public function setup()
     {
+        if(!backpack_user()->hasRole('SuperAdmin')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+            $this->crud->denyAccess('clone');
+
+        }
         CRUD::setModel(\App\Models\EvaluationPaper::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/evaluation-paper');
         CRUD::setEntityNameStrings(trans('nav.evaluation_paper'), trans('nav.evaluation_papers'));
@@ -37,7 +44,7 @@ class EvaluationPaperCrudController extends CrudController
 
     /**
      * Define what happens when the List operation is loaded.
-     * 
+     *
      * @see  https://backpackforlaravel.com/docs/crud-operation-list-entries
      * @return void
      */
@@ -49,13 +56,13 @@ class EvaluationPaperCrudController extends CrudController
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');
-         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']); 
+         * - CRUD::addColumn(['name' => 'price', 'type' => 'number']);
          */
     }
 
     /**
      * Define what happens when the Create operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-create
      * @return void
      */
@@ -81,7 +88,7 @@ class EvaluationPaperCrudController extends CrudController
             'type'  => 'hidden',
             'value' => 0,
         ]);
-        
+
         CRUD::addField([   // repeatable
             'name'  => 'structure',
             'label' => trans('labels.evaluation_paper'),
@@ -126,25 +133,25 @@ class EvaluationPaperCrudController extends CrudController
                     'min' => 1, // minimum rows allowed in the table
                 ],
             ],
-        
+
             // optional
             'new_item_label'  => trans('labels.add_criteria'), // customize the text of the button
             'init_rows' => 1, // number of empty rows to be initialized, by default 1
             'min_rows' => 1, // minimum rows allowed, when reached the "delete" buttons will be hidden
             'max_rows' => 100, // maximum rows allowed, when reached the "new item" button will be hidden
-        
+
         ]);
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:
          * - CRUD::field('price')->type('number');
-         * - CRUD::addField(['name' => 'price', 'type' => 'number'])); 
+         * - CRUD::addField(['name' => 'price', 'type' => 'number']));
          */
     }
 
     /**
      * Define what happens when the Update operation is loaded.
-     * 
+     *
      * @see https://backpackforlaravel.com/docs/crud-operation-update
      * @return void
      */
@@ -191,7 +198,7 @@ class EvaluationPaperCrudController extends CrudController
     }
 
     public function update()
-    {   
+    {
         $structure = $this->crud->getRequest()->request->get('structure');
         $structure = $this->fixStructure($structure);
         $this->crud->getRequest()->request->add(['structure'=> json_encode($structure, JSON_UNESCAPED_UNICODE)]);

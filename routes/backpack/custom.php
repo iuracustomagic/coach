@@ -16,6 +16,11 @@ Route::group([
     ),
     'namespace'  => 'App\Http\Controllers\Admin',
 ], function () { // custom admin routes
+    Route::get('language/{locale}', function ($locale) {
+        app()->setLocale($locale);
+        session()->put('locale', $locale);
+        return redirect()->back();
+    });
     Route::crud('company', 'CompanyCrudController');
     Route::crud('division', 'DivisionCrudController');
     Route::crud('supervisor', 'SupervisorCrudController');

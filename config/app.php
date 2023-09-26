@@ -93,8 +93,11 @@ return [
     |
     */
 
-    'fallback_locale' => 'en',
-
+    'fallback_locale' => 'ru',
+    'available_locales' =>[
+        'English' => 'en',
+        'Русский' => 'ru',
+        'Romanian' => 'ro',],
     /*
     |--------------------------------------------------------------------------
     | Faker Locale

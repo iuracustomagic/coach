@@ -64,6 +64,83 @@ class BranchReportCrudController extends CrudController
             }
         ]);
 
+        /* FILTERS */
+        $this->crud->addFilter([
+            'name'  => 'company_id',
+            'type'  => 'select2',
+            'label' => trans('labels.company')
+        ],  function () {
+            return \App\Models\Company::all()->keyBy('id')->pluck('name', 'id')->toArray();
+        },
+            function ($value) {
+            $companies = \App\Models\Company::where('id', $value)->get('id');
+            $this->crud->addClause('whereIn', 'company_id', $companies);
+        });
+
+        $this->crud->addFilter([
+            'name'  => 'division_id',
+            'type'  => 'select2',
+            'label' => trans('labels.division')
+        ],  function () {
+            return \App\Models\Division::all()->keyBy('id')->pluck('name', 'id')->toArray();
+        },
+            function ($value) {
+                $divisions = \App\Models\Division::where('id', $value)->get('id');
+                $this->crud->addClause('whereIn', 'division_id', $divisions);
+            });
+
+        $this->crud->addFilter([
+            'name'  => 'id',
+            'type'  => 'select2',
+            'label' => trans('labels.branch')
+        ], function () {
+            return \App\Models\Branch::all()->keyBy('id')->pluck('name', 'id')->toArray();
+        },
+            function ($value) {
+                $branches = \App\Models\Branch::where('id', $value)->get('id');
+                $this->crud->addClause('whereIn', 'id', $branches);
+            });
+
+        $this->crud->addFilter([
+            'name'  => 'region_id',
+            'type'  => 'select2',
+            'label' => trans('labels.region')
+        ],  function () {
+            return \App\Models\Region::all()->keyBy('id')->pluck('name', 'id')->toArray();
+        },
+            function ($value) {
+                $regions = \App\Models\Region::where('id', $value)->get('id');
+                $this->crud->addClause('whereIn', 'region_id', $regions);
+            });
+
+
+
+        $this->crud->addFilter([
+            'name'  => 'locality_id',
+            'type'  => 'select2',
+            'label' => trans('labels.locality')
+        ],  function () {
+            return \App\Models\Locality::all()->keyBy('id')->pluck('name', 'id')->toArray();
+        },
+            function ($value) {
+                $localities = \App\Models\Locality::where('id', $value)->get('id');
+                $this->crud->addClause('whereIn', 'locality_id', $localities);
+            });
+
+        $this->crud->addFilter([
+            'name'  => 'address',
+            'type'  => 'select2',
+            'label' => trans('labels.address')
+        ], function () {
+            return \App\Models\Branch::all()->keyBy('id')->pluck('address', 'id')->toArray();
+        },
+            function ($value) {
+                $addresses = \App\Models\Branch::where('id', $value)->get('address');
+                $this->crud->addClause('whereIn', 'address', $addresses);
+            });
+
+
+
         /**
          * Columns can be defined using the fluent syntax or array syntax:
          * - CRUD::column('price')->type('number');

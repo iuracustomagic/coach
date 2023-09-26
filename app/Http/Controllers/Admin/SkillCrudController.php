@@ -26,6 +26,13 @@ class SkillCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->hasRole('SuperAdmin')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+
+
+        }
         CRUD::setModel(\App\Models\Skill::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/skill');
         CRUD::setEntityNameStrings(trans('nav.skill'), trans('nav.skills'));

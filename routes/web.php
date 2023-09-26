@@ -39,7 +39,7 @@ Route::get('/api/supervisor', 'App\Http\Controllers\Api\SupervisorController@ind
 
 Route::get('/api/report', 'App\Http\Controllers\Api\ReportController@index');
 
-Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses', 'App\Http\Controllers\MyCoursesController@list');
+Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses', 'App\Http\Controllers\MyCoursesController@list')->name('courses');
 Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses/course/{course_id}', 'App\Http\Controllers\MyCoursesController@view');
 Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses/course/{course_id}/lesson/{lesson_id}', 'App\Http\Controllers\MyCoursesController@lesson');
 
@@ -48,6 +48,8 @@ Route::post('/quizzes/verify-quiz/{attempt_id}', 'App\Http\Controllers\QuizContr
 
 Route::get('/quizzes/fix', 'App\Http\Controllers\QuizController@fix');
 Route::get('/quizzes/fix-reports', 'App\Http\Controllers\QuizController@fixReports');
+
+Route::get('lang/{lang}', ['as' => 'lang.switch', 'uses' => 'App\Http\Controllers\LanguageController@switchLang']);
 
 //Route::post('/k11W9q7^OETVqUQrn/webhook', function () {
 //    $update = Telegram::commandsHandler(true);

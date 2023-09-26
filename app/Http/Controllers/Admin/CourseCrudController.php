@@ -26,6 +26,11 @@ class CourseCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('HandleCourses')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+        }
         CRUD::setModel(\App\Models\Course::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/course');
         CRUD::setEntityNameStrings(trans('nav.course'), trans('nav.courses'));

@@ -27,6 +27,12 @@ class LessonCrudController extends CrudController
      */
     public function setup()
     {
+        if(!backpack_user()->can('HandleLessons')) {
+            $this->crud->denyAccess('update');
+            $this->crud->denyAccess('create');
+            $this->crud->denyAccess('delete');
+            $this->crud->denyAccess('clone');
+        }
         CRUD::setModel(\App\Models\Lesson::class);
         CRUD::setRoute(config('backpack.base.route_prefix') . '/lesson');
         CRUD::setEntityNameStrings(trans('nav.lesson'), trans('nav.lessons'));
