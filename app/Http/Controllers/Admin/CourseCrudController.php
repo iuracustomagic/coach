@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\CourseRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class CourseCrudController
@@ -70,28 +71,32 @@ class CourseCrudController extends CrudController
             $this->crud->addClause('whereIn', 'id', $courses);
         }
 
+        if(App::getLocale() == 'ru') {
+            CRUD::column('name')->label(trans('labels.name'))->limit(50);
+        } else if(App::getLocale() == 'ro') {
+            CRUD::column('name_ro')->label(trans('labels.name'))->limit(50);
+        }else  {
+            CRUD::column('name_en')->label(trans('labels.name'))->limit(50);
+        }
 
-        CRUD::column('name')->limit(50);
-        CRUD::column('description');
+        if(App::getLocale() == 'ru') {
+            CRUD::column('description')->label(trans('labels.description'));
+        } else if(App::getLocale() == 'ro') {
+            CRUD::column('description_ro')->label(trans('labels.description'));
+        }else  {
+            CRUD::column('description_en')->label(trans('labels.description'));
+        }
+
+
         CRUD::addColumn([
             'name'  => 'professions_list',
             'label' => trans('labels.profession'), // Table column heading
             'type'  => 'model_function',
             'function_name' => 'getProfessionsList', // the method in your Model
         ]);
-        CRUD::column('sort_order');
+        CRUD::column('sort_order')->label(trans('labels.sort_order'));
 
-//        $this->crud->addColumns($this->getFieldsData(TRUE));
 
-        //CRUD::column('profession_id');
-//        CRUD::addColumn([
-//            'name'  => 'image',
-//            'label' => 'image', // Table column heading
-//            'type'  => 'image',
-//        ]);
-
-        //CRUD::column('created_at');
-        //CRUD::column('updated_at');
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -110,11 +115,44 @@ class CourseCrudController extends CrudController
     {
         CRUD::setValidation(CourseRequest::class);
 
-        CRUD::field('name')->label(trans('labels.name'));
+        CRUD::addField([
+            'name'  => 'name',
+            'label' => trans('labels.name').'-ru',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+                ],
+            ]);
+        CRUD::addField([
+            'name'  => 'name_ro',
+            'label' => trans('labels.name').'-ro',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
+        CRUD::addField([
+            'name'  => 'name_en',
+            'label' => trans('labels.name').'-en',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
 
-        CRUD::addField([   // Textarea
+
+        CRUD::addField([
             'name'  => 'description',
-            'label' => trans('labels.description'),
+            'label' => trans('labels.description').'-ru',
+            'type'  => 'textarea',
+
+        ]);
+        CRUD::addField([   // Textarea
+            'name'  => 'description_ro',
+            'label' => trans('labels.description').'-ro',
+            'type'  => 'textarea',
+
+        ]);
+        CRUD::addField([   // Textarea
+            'name'  => 'description_en',
+            'label' => trans('labels.description').'-en',
             'type'  => 'textarea'
         ]);
 
@@ -191,22 +229,10 @@ class CourseCrudController extends CrudController
             'name'  => 'banner',
             'label' => trans('labels.banner'),
             'type'  => 'browse'
-//            'type'  => 'image',
-//            'crop' => true, // set to true to allow cropping, false to disable
-//            'aspect_ratio' => 1,
 
 
         ]);
-//        CRUD::addField([   // Browse
-//            'name'  => 'image',
-//            'label' => 'image',
-//            'type'  => 'image',
-//            'crop' => true, // set to true to allow cropping, false to disable
-//            'aspect_ratio' => 1,
-////            'disk'      => 'storage',
-////            'prefix'    => 'app/'
-//
-//        ]);
+
 
 
         /**

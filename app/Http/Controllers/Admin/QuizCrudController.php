@@ -197,15 +197,31 @@ class QuizCrudController extends CrudController
                     'label' => trans('labels.image'),
                     'type'  => 'browse',
                     'wrapper'   => [
-                       'class' => 'form-group col-md-4'
+                       'class' => 'form-group col-md-3'
                     ]
                 ],
                 [
                     'name'  => 'question',
-                    'type'  => 'textarea',
-                    'label' => trans('labels.question'),
+
+                    'label' => trans('labels.question').'-ru',
                     'wrapper'   => [
-                       'class' => 'form-group col-md-8'
+                       'class' => 'form-group col-md-3'
+                    ]
+                ],
+                [
+                    'name'  => 'question_ro',
+
+                    'label' => trans('labels.question').'-ro',
+                    'wrapper'   => [
+                        'class' => 'form-group col-md-3'
+                    ]
+                ],
+                [
+                    'name'  => 'question_en',
+
+                    'label' => trans('labels.question').'-en',
+                    'wrapper'   => [
+                        'class' => 'form-group col-md-3'
                     ]
                 ],
                 [   // Table
@@ -215,8 +231,18 @@ class QuizCrudController extends CrudController
                     'entity_singular' => trans('labels.answer'), // used on the "Add X" button
                     'columns'         => [
                         [
-                            'label' => trans('labels.answer'),
+                            'label' => trans('labels.answer').'-ru',
                             'name'  => 'option',
+                            'type' => 'text'
+                        ],
+                        [
+                            'label' => trans('labels.answer').'-ro',
+                            'name'  => 'option_ro',
+                            'type' => 'text'
+                        ],
+                        [
+                            'label' => trans('labels.answer').'-en',
+                            'name'  => 'option_en',
                             'type' => 'text'
                         ],
                         [

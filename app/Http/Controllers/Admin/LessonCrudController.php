@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\LessonRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class LessonCrudController
@@ -70,16 +71,54 @@ class LessonCrudController extends CrudController
             $this->crud->addClause('whereIn', 'course_id', $courses);
         }
         //CRUD::column('id');
-        CRUD::column('course_id');
-        CRUD::column('name');
-        CRUD::column('description');
-        //CRUD::column('content');
-//        CRUD::column('video');
-//        CRUD::column('gallery');
-//        CRUD::column('banner');
-        CRUD::column('sort_order');
-        //CRUD::column('created_at');
-        //CRUD::column('updated_at');
+//        CRUD::column('course_id')->label(trans('labels.course'));
+
+        if(App::getLocale() == 'ru') {
+            $this->crud->addColumn([
+                'name'      => 'course_id',
+                'type'      => 'select',
+                'label'     => trans('labels.course'),
+                'attribute' => 'name', // foreign key attribute that is shown to user
+                'model'     => "App\Models\Course",
+            ]);
+        } else if(App::getLocale() == 'ro') {
+            $this->crud->addColumn([
+                'name'      => 'course_id',
+                'type'      => 'select',
+                'label'     => trans('labels.course'),
+                'attribute' => 'name_ro', // foreign key attribute that is shown to user
+                'model'     => "App\Models\Course",
+            ]);
+        }else  {
+            $this->crud->addColumn([
+                'name'      => 'course_id',
+                'type'      => 'select',
+                'label'     => trans('labels.course'),
+                'attribute' => 'name_en', // foreign key attribute that is shown to user
+                'model'     => "App\Models\Course",
+            ]);
+        }
+
+
+        if(App::getLocale() == 'ru') {
+            CRUD::column('name')->label(trans('labels.name'))->limit(50);
+        } else if(App::getLocale() == 'ro') {
+            CRUD::column('name_ro')->label(trans('labels.name'))->limit(50);
+        }else  {
+            CRUD::column('name_en')->label(trans('labels.name'))->limit(50);
+        }
+
+        if(App::getLocale() == 'ru') {
+            CRUD::column('description')->label(trans('labels.description'));
+        } else if(App::getLocale() == 'ro') {
+            CRUD::column('description_ro')->label(trans('labels.description'));
+        }else  {
+            CRUD::column('description_en')->label(trans('labels.description'));
+        }
+
+
+        CRUD::column('sort_order')->label(trans('labels.sort_order'));
+
 
         /* FILTERS */
 
@@ -116,20 +155,71 @@ class LessonCrudController extends CrudController
         //CRUD::field('id');
         CRUD::field('course_id')->label(trans('labels.course'));
 
-        CRUD::field('name')->label(trans('labels.name'));
 
-        CRUD::addField([   // Textarea
+        CRUD::addField([
+            'name'  => 'name',
+            'label' => trans('labels.name').'-ru',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
+        CRUD::addField([
+            'name'  => 'name_ro',
+            'label' => trans('labels.name').'-ro',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
+        CRUD::addField([
+            'name'  => 'name_en',
+            'label' => trans('labels.name').'-en',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
+
+
+        CRUD::addField([
             'name'  => 'description',
-            'label' => trans('labels.description'),
-            'type'  => 'textarea'
+            'label' => trans('labels.description').'-ru',
+            'type'  => 'textarea',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+
+        ]);
+        CRUD::addField([   // Textarea
+            'name'  => 'description_ro',
+            'label' => trans('labels.description').'-ro',
+            'type'  => 'textarea',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+
+        ]);
+        CRUD::addField([   // Textarea
+            'name'  => 'description_en',
+            'label' => trans('labels.description').'-en',
+            'type'  => 'textarea',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
         ]);
 
         CRUD::addField([   // TinyMCE
             'name'  => 'content',
-            'label' => trans('labels.content'),
+            'label' => trans('labels.content').'-ru',
             'type'  => 'tinymce',
-            // optional overwrite of the configuration array
-            // 'options' => [ 'selector' => 'textarea.tinymce',  'skin' => 'dick-light', 'plugins' => 'image,link,media,anchor' ],
+        ]);
+        CRUD::addField([   // TinyMCE
+            'name'  => 'content_ro',
+            'label' => trans('labels.content')."-ro",
+            'type'  => 'tinymce',
+        ]);
+        CRUD::addField([   // TinyMCE
+            'name'  => 'content_en',
+            'label' => trans('labels.content').'-en',
+            'type'  => 'tinymce',
         ]);
 
         CRUD::addField([   // Browse

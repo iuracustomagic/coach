@@ -26,7 +26,7 @@ return [
 	'video' => 'Видео',
 	'gallery' => 'Галерея',
 	'banner' => 'Баннер',
-	'sort_order' => 'Порядок сортировки',
+	'sort_order' => 'Сортировка',
 	'phone' => 'Телефон',
 	'business_phone' => 'Рабочии телефон',
 	'personal_phone' => 'Личный телефон',

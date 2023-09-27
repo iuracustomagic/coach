@@ -26,6 +26,8 @@ class QuizObserver
                         $questionModel->quiz_id = $quiz->id;
                         $questionModel->image = isset($question['image']) ? $question['image'] : null;
                         $questionModel->question = $question['question'];
+                        $questionModel->question_ro = $question['question_ro'];
+                        $questionModel->question_en = $question['question_en'];
                         if($questionModel->save()){
                             $questions[$qkey]['id'] = $questionModel->id;
 
@@ -36,6 +38,13 @@ class QuizObserver
                                         $answerModel = new \App\Models\Answer();
                                         $answerModel->question_id = $questionModel->id;
                                         $answerModel->answer = $answer['option'];
+                                        if(isset($answer['option_ro'])) {
+                                            $answerModel->answer_ro = $answer['option_ro'];
+                                        }
+                                        if(isset($answer['option_en'])) {
+                                            $answerModel->answer_en = $answer['option_en'];
+                                        }
+
                                         $answerModel->is_true = $answer['is_true'];
                                         if($answerModel->save()){
                                             $answers[$akey]['id'] = $answerModel->id;
@@ -80,10 +89,12 @@ class QuizObserver
                                 $questionModel = new \App\Models\Question();
                             }
                         }
-                        
+
                         $questionModel->quiz_id = $quiz->id;
                         $questionModel->image = isset($question['image']) ? $question['image'] : null;
                         $questionModel->question = $question['question'];
+                        $questionModel->question_ro = $question['question_ro'];
+                        $questionModel->question_en = $question['question_en'];
                         if($questionModel->save()){
                             $questions[$qkey]['id'] = $questionModel->id;
 
@@ -99,9 +110,16 @@ class QuizObserver
                                                 $answerModel = new \App\Models\Answer();
                                             }
                                         }
-                                        
+
                                         $answerModel->question_id = $questionModel->id;
                                         $answerModel->answer = $answer['option'];
+                                        if(isset($answer['option_ro'])) {
+                                            $answerModel->answer_ro = $answer['option_ro'];
+                                        }
+                                        if(isset($answer['option_en'])) {
+                                            $answerModel->answer_en = $answer['option_en'];
+                                        }
+
                                         $answerModel->is_true = $answer['is_true'];
                                         if($answerModel->save()){
                                             $answers[$akey]['id'] = $answerModel->id;
