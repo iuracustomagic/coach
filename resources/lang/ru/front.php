@@ -10,6 +10,7 @@ return [
 	'not_support_video' => 'Браузер не поддерживает видео',
 	'go_to_course' => 'Перейти к курсу',
 	'go_to_lesson' => 'Перейти к уроку',
+    'go_back' => 'Назад',
 	'no_courses_available' => 'Нет доступных курсов',
 	'total_questions' => 'Всего вопросов',
 	'total_attempts' => 'Сделано попыток',

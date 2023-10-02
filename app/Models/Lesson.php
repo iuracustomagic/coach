@@ -24,7 +24,11 @@ class Lesson extends Model
     // protected $dates = [];
     protected $casts = [
         'video' => 'array',
-        'gallery' => 'array'
+        'video_ro' => 'array',
+        'video_en' => 'array',
+        'gallery' => 'array',
+        'gallery_ro' => 'array',
+        'gallery_en' => 'array',
     ];
 
     /*

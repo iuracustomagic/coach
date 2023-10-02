@@ -225,14 +225,30 @@ class CourseCrudController extends CrudController
             'attributes' => ["step" => "1", "min" => "1"], // allow decimals
         ]);
 
-        CRUD::addField([   // Browse
+        CRUD::addField([
             'name'  => 'banner',
-            'label' => trans('labels.banner'),
-            'type'  => 'browse'
-
-
+            'label' => trans('labels.banner').'-ru',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
         ]);
-
+        CRUD::addField([
+            'name'  => 'banner_ro',
+            'label' => trans('labels.banner').'-ro',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([
+            'name'  => 'banner_en',
+            'label' => trans('labels.banner').'-en',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
 
 
         /**
@@ -262,7 +278,7 @@ class CourseCrudController extends CrudController
         $response = $this->traitUpdate();
         // do something after save
         $course = \App\Models\Course::find($this->crud->getRequest()->input('id'));
-        $subscribed = \App\Models\UserAvailableCourses::where('course_id', $course->id)->pluck('course_id', 'user_id');
+//        $subscribed = \App\Models\UserAvailableCourses::where('course_id', $course->id)->pluck('course_id', 'user_id');
         if(!empty($course->professions)){
             foreach($course->professions as $profession){
                 foreach($profession->employees as $employee){
@@ -272,15 +288,16 @@ class CourseCrudController extends CrudController
                         $pivot->user_id = $employee->id;
                         $pivot->course_id = $course->id;
                         $pivot->save();
-                    } else {
-                        unset($subscribed[$pivot->user_id]);
                     }
+//                    else {
+//                        unset($subscribed[$pivot->user_id]);
+//                    }
                 }
             }
         }
-        foreach($subscribed as $user_id => $course_id){
-            $pivot = \App\Models\UserAvailableCourses::where(['user_id' => $user_id, 'course_id' => $course_id])->delete();
-        }
+//        foreach($subscribed as $user_id => $course_id){
+//            $pivot = \App\Models\UserAvailableCourses::where(['user_id' => $user_id, 'course_id' => $course_id])->delete();
+//        }
         return $response;
     }
 

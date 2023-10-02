@@ -1,5 +1,28 @@
 @extends(backpack_view('blank'))
+@php
+    use Illuminate\Support\Facades\App;
+    $locale=App::getLocale();
+                if($locale == 'ru'){
+                            $name=$course->name;
+                            $description = $course->description;
+                            }   else if($locale == 'ro'){
+                                    if(isset($course->name_ro)){
+                                        $name=$course->name_ro;
+                                    } else  $name=$course->name;
+                                    if(isset($course->description_ro)){
+                                       $description = $course->description_ro;
+                                    } else  $description = $course->description;
 
+
+                            }  else {
+                                if(isset($course->name_en)){
+                                        $name=$course->name_en;
+                                    } else  $name=$course->name;
+                                    if(isset($course->description_en)){
+                                       $description = $course->description_en;
+                                    } else  $description = $course->description;
+                            }
+@endphp
 <style type="text/css">
 	.card-horizontal {
 	  display: flex;
@@ -14,24 +37,54 @@
 			<div class="card">
 				<div class="card-body row">
 					@if($course)
+
 						<div class="col-sm-12">
-							<h3>{{$course->name}}</h3>
-							<p>{{$course->description}}</p>
+							<h3>{{$name}}</h3>
+							<p>{{$description}}</p>
 
 							@if($course->lessons)
 									@foreach($course->lessons as $lesson)
+                                    @php
+                                        if($locale == 'ru'){
+                                        $lessonName=$lesson->name;
+                                        $lessonDescription = $lesson->description;
+                                         $banner = $lesson->banner;
+                                        }   else if($locale == 'ro'){
+                                                if(isset($lesson->name_ro)){
+                                                    $lessonName=$lesson->name_ro;
+                                                } else  $lessonName=$lesson->name;
+                                                if(isset($lesson->description_ro)){
+                                                   $lessonDescription = $lesson->description_ro;
+                                                } else  $lessonDescription = $lesson->description;
+                                                if(isset($lesson->banner_ro)){
+                                                    $banner=$lesson->banner_ro;
+                                                } else  $banner=$lesson->banner;
+
+
+                                        }  else {
+                                            if(isset($lesson->name_en)){
+                                                    $lessonName=$lesson->name_en;
+                                                } else  $lessonName=$lesson->name;
+                                                if(isset($lesson->description_en)){
+                                                   $lessonDescription = $lesson->description_en;
+                                                } else  $lessonDescription = $lesson->description;
+                                                if(isset($lesson->banner_en)){
+                                                    $banner=$lesson->banner_en;
+                                                } else  $banner=$lesson->banner;
+                                        }
+                                    @endphp
 											<div class="card">
 												<div class="card-horizontal">
 													<div class="img-square-wrapper" style="max-width: 300px;">
-														@if($lesson->banner)
-															<img src="{{\Storage::url($lesson->banner)}}" alt="{{$lesson->name}}" style="max-width: 100%">
+														@if($banner)
+															<img src="{{\Storage::url($banner)}}" alt="{{$lessonName}}" style="max-width: 100%">
 														@else
-												  			<img src="https://place-hold.it/286x180?text=NO IMAGE" alt="{{$course->name}}">
+												  			<img src="https://place-hold.it/286x180?text=NO IMAGE" alt="{{$lessonName}}">
 												  		@endif
 												  	</div>
 												  	<div class="card-body">
-													    <h5 class="card-title">{{$loop->iteration}}. {{$lesson->name}}</h5>
-													    <p class="card-text">{{$lesson->description}}</p>
+													    <h5 class="card-title">{{$loop->iteration}}. {{$lessonName}}</h5>
+													    <p class="card-text">{{$lessonDescription}}</p>
 												  	</div>
 												</div>
 												<div class="card-footer">

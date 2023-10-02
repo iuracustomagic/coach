@@ -80,15 +80,41 @@
         width: 100%;
     }
 </style>
+@php
+    use Illuminate\Support\Facades\App;
+    $locale=App::getLocale();
+                      if($locale == 'ru'){
+                            $courseName=$quiz->course->name;
+                            $lessonName = $quiz->lesson->name;
+
+                            }   else if($locale == 'ro'){
+                                    if(isset($quiz->course->name_ro)){
+                                        $courseName=$quiz->course->name_ro;
+                                    } else  $courseName=$quiz->course->name;
+                                    if(isset($quiz->lesson->name_ro)){
+                                       $lessonName = $quiz->lesson->name_ro;
+                                    } else  $lessonName = $quiz->lesson->name;
+
+                            }  else {
+                                if(isset($quiz->course->name_en)){
+                                        $courseName=$quiz->course->name_en;
+                                    } else  $courseName=$quiz->course->name;
+                                    if(isset($quiz->lesson->name_en)){
+                                       $lessonName = $quiz->lesson->name_en;
+                                    } else  $lessonName = $quiz->lesson->name;
+
+                            }
+
+@endphp
 
 @section('content')
 	<div class="row">
 		<div class="col-sm-12">
-		<!-- Default box -->	
+		<!-- Default box -->
 			<div class="card">
 				<div class="card-body">
-					<h3>{{ trans('front.course') }}: {{$quiz->course->name}}</h3>
-					<h4>{{ trans('front.lesson') }}: {{$quiz->lesson->name ?? trans('front.final_quiz')}}</h4>
+					<h3>{{ trans('front.course') }}: {{$courseName}}</h3>
+					<h4>{{ trans('front.lesson') }}: {{$lessonName ?? trans('front.final_quiz')}}</h4>
 
 					@if($questions)
 						<form id="quizForm" method="POST" action="/quizzes/verify-quiz/{{$attempt->id}}">
@@ -97,24 +123,39 @@
 							<div class="card col-sm-12">
 								<div class="card-body">
 									@foreach($questions as $question)
-									<div    class="tab" 
+                                        @php
+                                            if($locale == 'ru'){
+                                            $name=$question->question;
+                                            }  else if($locale == 'ro'){
+                                                    if(isset($question->question_ro)){
+                                                        $name=$question->question_ro;
+                                                    } else  $name=$question->question;
+                                                    }
+                                                    else {
+                                                    if(isset($question->question_en)){
+                                                        $name=$question->question_en;
+                                                    } else  $name=$question->question;
+                                                    }
+                                        @endphp
+									<div    class="tab"
                                             data-question-id="{{$question->id}}"
                                             data-question-nr="{{$loop->iteration}}"
-                                    >   
+                                    >
                                     @if(!empty($question->image))
-                                        <div class="card-horizontal row"> 
+
+                                        <div class="card-horizontal row">
                                             <div class="img-square-wrapper col-lg-4 col-md-6">
                                                 <img src="{{\Storage::url(str_replace("\\", "/", $question->image))}}" alt="{{$question->question}}">
                                             </div>
                                             <div class="card-body col-lg-8 col-md-6">
                                                 <h5 class="card-title">
-                                                    {{$loop->iteration}}. {{$question->question}}
+                                                    {{$loop->iteration}}. {{$name}}
                                                 </h5>
                                             </div>
                                         </div>
                                     @else
                                         <h5 class="card-title">
-                                            {{$loop->iteration}}. {{$question->question}}
+                                            {{$loop->iteration}}. {{$name}}
                                         </h5>
                                     @endif
 
@@ -122,9 +163,24 @@
 
                                         <div class="row">
     										@forelse($question->answers as $answer)
+{{--                                                @dump($locale)--}}
+                                               @php
+                                                   if($locale == 'ru'){
+                                                $answerName = $answer['answer'];
+                                                }  else if($locale == 'ro'){
+                                                    if(isset($answer->answer_ro)){
+                                                    $answerName=$answer->answer_ro;
+                                                    } else  $answerName=$answer->answer;
+                                                }
+                                                else {
+                                                    if(isset($answer->answer_en)){
+                                                    $answerName=$answer->answer_en;
+                                                    } else  $answerName=$answer->answer;
+                                                 }
+                                                @endphp
     											<div class="col-lg-4 col-md-6 col-sm-12">
                                                     <label class="card checkbox-wrapper" for="answer_{{$answer['id']}}">
-                                                        {{$answer['answer']}}
+                                                        <span>{{$answerName}}</span>
         											  	<input class="form-check-input" type="checkbox" name="questions[{{$question['id']}}][]" id="answer_{{$answer['id']}}" value="{{$answer['id']}}">
                                                         <span class="checkmark"></span>
     											  	</label>
@@ -150,7 +206,7 @@
 			</div>
 		</div>
 	</div>
-@endsection	
+@endsection
 
 <script type="text/javascript">
 
@@ -173,7 +229,7 @@ function showTab(n) {
             }
             duration[currentQuestion] = markers;
         }
-        
+
     x[n].style.display = "block";
 
     // ... and fix the Previous/Next buttons:

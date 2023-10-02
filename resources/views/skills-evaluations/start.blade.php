@@ -38,13 +38,13 @@
                 <tr>
                     <th>
                         <h3>{{$employee->name}}</h3>
-                        <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
-                        <h6>Подразделение: <b>{{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
-                        <h6>Населенный пункт: <b>{{$employee->getLocalityName() ? $employee->getLocalityName() : '-'}}</b></h6>
-                        <h6>Оценивает: <b>{{backpack_user()->name}}</b></h6>
+                        <h6>{{trans('labels.profession')}}: <b> {{$employee->profession->name}}</b></h6>
+                        <h6>{{trans('labels.division')}}: <b> {{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
+                        <h6>{{trans('nav.locality')}}: <b> {{$employee->getLocalityName() ? $employee->getLocalityName() : '-'}}</b></h6>
+                        <h6>{{trans('labels.evaluates')}}: <b> {{backpack_user()->name}}</b></h6>
                 </th>
                 <th class="date">
-                    <p>Дата проверки</p>
+                    <p>{{trans('labels.date')}}/p>
                     <p>{{date('Y-m-d')}}</p>
                 </th>
             </tr>

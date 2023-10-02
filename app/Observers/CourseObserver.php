@@ -50,7 +50,22 @@ class CourseObserver
      */
     public function updated(Course $course)
     {
-        //
+
+//        if(!empty($course->professions)){
+//            foreach($course->professions as $profession){
+//                if(!empty($profession->employees)){
+//                    foreach($profession->employees as $employee){
+//                        $pivot = \App\Models\UserAvailableCourses::where(['user_id' => $employee->id, 'course_id' => $course->id])->first();
+//                        if(empty($pivot)){
+//                            $pivot = new \App\Models\UserAvailableCourses();
+//                            $pivot->user_id = $employee->id;
+//                            $pivot->course_id = $course->id;
+//                            $pivot->save();
+//                        }
+//                    }
+//                }
+//            }
+//        }
     }
 
     /**

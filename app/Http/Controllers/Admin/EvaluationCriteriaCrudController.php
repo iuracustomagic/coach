@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\EvaluationCriteriaRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class EvaluationCriteriaCrudController
@@ -49,8 +50,14 @@ class EvaluationCriteriaCrudController extends CrudController
         // Deny deleting
         $this->crud->denyAccess('show');
       //  $this->crud->denyAccess('delete');
-
-        CRUD::column('name')->label(trans('labels.name'))->limit(100);
+        CRUD::column('name')->label(trans('labels.name'))->limit(50);
+//        if(App::getLocale() == 'ru') {
+//            CRUD::column('name')->label(trans('labels.name'))->limit(50);
+//        } else if(App::getLocale() == 'ro') {
+//            CRUD::column('name_ro')->label(trans('labels.name'))->limit(50);
+//        }else  {
+//            CRUD::column('name_en')->label(trans('labels.name'))->limit(50);
+//        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -69,7 +76,28 @@ class EvaluationCriteriaCrudController extends CrudController
     {
         CRUD::setValidation(EvaluationCriteriaRequest::class);
 
-        CRUD::field('name')->label(trans('labels.name'));
+        CRUD::addField([
+            'name'  => 'name',
+            'label' => trans('labels.name').'-ru',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
+        ]);
+//        CRUD::addField([
+//            'name'  => 'name_ro',
+//            'label' => trans('labels.name').'-ro',
+//            'wrapper'   => [
+//                'class'      => 'form-group col-md-4'
+//            ],
+//        ]);
+//        CRUD::addField([
+//            'name'  => 'name_en',
+//            'label' => trans('labels.name').'-en',
+//            'wrapper'   => [
+//                'class'      => 'form-group col-md-4'
+//            ],
+//        ]);
+
 
         /**
          * Fields can be defined using the fluent syntax or array syntax:

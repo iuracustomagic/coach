@@ -10,6 +10,7 @@ return [
 	'not_support_video' => 'Browserul nu suportă videoclipuri',
 	'go_to_course' => 'Accesați cursul',
 	'go_to_lesson' => 'Accesați lecția',
+    'go_back' => 'Go back',
 	'no_courses_available' => 'Niciun curs disponibil',
 	'total_questions' => 'Număr total de întrebări',
 	'total_attempts' => 'Încercări efectuate',

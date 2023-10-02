@@ -39,14 +39,14 @@
                         <a class="btn btn-sm btn-success" href="/admin/skills-evaluation/{{$employee->id}}/start"><i
                                 class="la la-area-chart"></i></a>
                     </h3>
-                    <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
-                    <h6>Подразделение: <b>{{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
-                    <h6>Населенный пункт: <b>{{$employee->getLocalityName() ? $employee->getLocalityName() : '-'}}</b></h6>
+                    <h6>{{trans('labels.profession')}}: <b>{{$employee->profession->name}}</b></h6>
+                    <h6>{{trans('labels.division')}}: <b>{{$employee->divisions ? $employee->divisions[0]['name'] : '-'}}</b></h6>
+                    <h6>{{trans('nav.locality')}}: <b>{{$employee->getLocalityName() ? $employee->getLocalityName() : '-'}}</b></h6>
                 </th>
                 @foreach($dates as $date)
                     <th class="date">
-                        <p>Дата <br> {{$date['date']}}</p>
-                        <p>Проверял:<br> {{$date['examiner']}}</p>
+                        <p>{{trans('labels.date')}}: <br> {{$date['date']}}</p>
+                        <p>{{trans('labels.evaluates')}}:<br> {{$date['examiner']}}</p>
 
                     </th>
                 @endforeach

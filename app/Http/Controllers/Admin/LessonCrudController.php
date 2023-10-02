@@ -78,7 +78,7 @@ class LessonCrudController extends CrudController
                 'name'      => 'course_id',
                 'type'      => 'select',
                 'label'     => trans('labels.course'),
-                'attribute' => 'name', // foreign key attribute that is shown to user
+                'attribute' => 'name',
                 'model'     => "App\Models\Course",
             ]);
         } else if(App::getLocale() == 'ro') {
@@ -86,7 +86,7 @@ class LessonCrudController extends CrudController
                 'name'      => 'course_id',
                 'type'      => 'select',
                 'label'     => trans('labels.course'),
-                'attribute' => 'name_ro', // foreign key attribute that is shown to user
+                'attribute' => 'name_ro',
                 'model'     => "App\Models\Course",
             ]);
         }else  {
@@ -94,7 +94,7 @@ class LessonCrudController extends CrudController
                 'name'      => 'course_id',
                 'type'      => 'select',
                 'label'     => trans('labels.course'),
-                'attribute' => 'name_en', // foreign key attribute that is shown to user
+                'attribute' => 'name_en',
                 'model'     => "App\Models\Course",
             ]);
         }
@@ -224,24 +224,90 @@ class LessonCrudController extends CrudController
 
         CRUD::addField([   // Browse
             'name'  => 'video',
-            'label' => trans('labels.video'),
+            'label' => trans('labels.video').'-ru',
             'type'  => 'browse_multiple',
             'sortable'   => true, // enable/disable the reordering with drag&drop
-            'mime_types' => ['video/mp4']
+            'mime_types' => ['video/mp4'],
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'video_ro',
+            'label' => trans('labels.video').'-ro',
+            'type'  => 'browse_multiple',
+            'sortable'   => true, // enable/disable the reordering with drag&drop
+            'mime_types' => ['video/mp4'],
+            'multiple'   => true,
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'video_en',
+            'label' => trans('labels.video').'-en',
+            'type'  => 'browse_multiple',
+            'sortable'   => true, // enable/disable the reordering with drag&drop
+            'mime_types' => ['video/mp4'],
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
         ]);
 
         CRUD::addField([   // Browse
             'name'  => 'gallery',
-            'label' => trans('labels.gallery'),
+            'label' => trans('labels.gallery').'-ru',
             'type'  => 'browse_multiple',
             'sortable'   => true, // enable/disable the reordering with drag&drop
-            'mime_types' => ['image/jpeg', 'image/png']
+            'mime_types' => ['image/jpeg', 'image/png'],
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'gallery_ro',
+            'label' => trans('labels.gallery').'-ro',
+            'type'  => 'browse_multiple',
+            'sortable'   => true, // enable/disable the reordering with drag&drop
+            'mime_types' => ['image/jpeg', 'image/png'],
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'gallery_en',
+            'label' => trans('labels.gallery').'-en',
+            'type'  => 'browse_multiple',
+            'sortable'   => true, // enable/disable the reordering with drag&drop
+            'mime_types' => ['image/jpeg', 'image/png'],
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
         ]);
 
         CRUD::addField([   // Browse
             'name'  => 'banner',
-            'label' => trans('labels.banner'),
-            'type'  => 'browse'
+            'label' => trans('labels.banner').'-ru',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'banner_ro',
+            'label' => trans('labels.banner').'-ro',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
+        ]);
+        CRUD::addField([   // Browse
+            'name'  => 'banner_en',
+            'label' => trans('labels.banner').'-en',
+            'type'  => 'browse',
+            'wrapper'   => [
+                'class' => 'form-group col-md-4'
+            ]
         ]);
 
         CRUD::addField([   // Number

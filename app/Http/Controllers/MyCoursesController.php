@@ -1,17 +1,18 @@
 <?php
- 
+
 namespace App\Http\Controllers;
- 
+
 use App\Http\Controllers\Controller;
 use App\Models\Course;
 use App\Models\Lesson;
- 
+
 class MyCoursesController extends Controller
 {
     public function list()
     {
         $user = backpack_user();
         $courses = $user->courses;
+//        dd($user->id);
         return view('courses.list', [
             'courses' => $courses
         ]);
@@ -37,7 +38,7 @@ class MyCoursesController extends Controller
     public function lesson($course_id, $lesson_id)
     {
         $lesson = Lesson::find($lesson_id);
-        
+
         if(!$lesson){
             abort(404, 'Lesson not found');
         }
@@ -47,7 +48,8 @@ class MyCoursesController extends Controller
         }
 
         return view('courses.lesson.view', [
-            'lesson' => $lesson
+            'lesson' => $lesson,
+            'course_id'=>$course_id
         ]);
     }
 }

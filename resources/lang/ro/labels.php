@@ -92,4 +92,6 @@ return [
     'avg' => 'Evaluare medie',
     'first_name' => 'Nume',
     'role' => 'Role',
+    'evaluates' => 'Evaluează',
+    'date' => 'Data',
 ];

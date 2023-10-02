@@ -1,13 +1,13 @@
 <?php
- 
+
 namespace App\Http\Controllers;
- 
+
 use App\Http\Controllers\Controller;
 use App\Models\Quiz;
 use App\Models\Attempt;
 use App\Models\Question;
 use App\Models\Answer;
- 
+
 class QuizController extends Controller
 {
     public function start($quiz_id)
@@ -24,7 +24,8 @@ class QuizController extends Controller
         $attempt->save();
 
         $questions = $quiz->is_final ? $quiz->finalQuizQuestions() : $quiz->questionsList;
-
+//dump($quiz);
+//dd($questions);
         return view('quizzes.start', [
             'attempt' => $attempt,
             'quiz' => $quiz,
@@ -73,7 +74,7 @@ class QuizController extends Controller
                             } else {
                                 $isTrue = false;
                             }
-                            
+
                             $userAnswer[] = $options[$answer]['answer'];
                         }
                     }
@@ -115,7 +116,7 @@ class QuizController extends Controller
                 if($attempt->status == 'FAILED'){
                     $report->failed_attempts += 1;
                 }
-                $report->total_points += $attempt->mark; 
+                $report->total_points += $attempt->mark;
                 $report->avg_mark = round($report->total_points / $report->total_attempts, 2);
                 $report->best_mark = null == $report->best_mark ? 0 : $report->best_mark;
                 $report->best_mark = $attempt->mark > $report->best_mark ? $attempt->mark : $report->best_mark;
@@ -159,7 +160,7 @@ class QuizController extends Controller
 
         return view('quizzes.result', [
             'attempt' => $attempt
-        ]); 
+        ]);
     }
 
     public function fix()
@@ -178,7 +179,7 @@ class QuizController extends Controller
         }*/
 
         // Step 2
-        
+
         /*$reports = \App\Models\Report::where('course_id', '!=', 0)->get();
         foreach($reports as $report){
             $result = \App\Models\UserResults::where(['user_id' => $report->user_id, 'course_id' => $report->course_id])->first();
@@ -271,7 +272,7 @@ class QuizController extends Controller
                 if($attempt->status == 'FAILED'){
                     $report->failed_attempts += 1;
                 }
-                $report->total_points += $attempt->mark; 
+                $report->total_points += $attempt->mark;
                 $report->avg_mark = round($report->total_points / $report->total_attempts, 2);
                 $report->best_mark = null == $report->best_mark ? 0 : $report->best_mark;
                 $report->best_mark = $attempt->mark > $report->best_mark ? $attempt->mark : $report->best_mark;

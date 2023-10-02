@@ -190,35 +190,84 @@
 
 
 </style>
+@php
+    use Illuminate\Support\Facades\App;
+    $locale=App::getLocale();
+                if($locale == 'ru'){
+                            $name=$lesson->name;
+                            $description = $lesson->description;
+                            $video = $lesson->video;
+                            if($lesson->content) {
+                                $content = $lesson->content;
+                            }
+                            if($lesson->gallery) {
+                                $gallery = $lesson->gallery;
+                            }
+                }   else if($locale == 'ro'){
+                        if(isset($lesson->name_ro)){
+                            $name=$lesson->name_ro;
+                        } else  $name=$lesson->name;
+                        if(isset($lesson->description_ro)){
+                           $description = $lesson->description_ro;
+                        } else  $description = $lesson->description;
+                        if(isset($lesson->content_ro)){
+                           $content = $lesson->content_ro;
+                        } else $content ='';
+                        if(isset($lesson->video_ro)){
+                            $video=$lesson->video_ro;
+                        } else  $video=$lesson->video;
+                        if(isset($lesson->gallery_ro)){
+                            $gallery=$lesson->gallery_ro;
+                        } else  $gallery=null;
 
+                }  else {
+                    if(isset($lesson->name_en)){
+                            $name=$lesson->name_en;
+                        } else  $name=$lesson->name;
+                        if(isset($lesson->description_en)){
+                           $description = $lesson->description_en;
+                        } else  $description = $lesson->description;
+                         if(isset($lesson->content_en)){
+                           $content = $lesson->content_en;
+                        } else $content ='';
+                             if(isset($lesson->video_en)){
+                            $video=$lesson->video_en;
+                        } else  $video=$lesson->video;
+                        if(isset($lesson->gallery_en)){
+                            $gallery=$lesson->gallery_en;
+                        } else  $gallery=null;
+                }
+@endphp
 @section('content')
+
 	<div class="row">
 		<div class="col-sm-12">
 		<!-- Default box -->
 			<div class="card">
 				<div class="card-body row">
+                    <a href="{{route('course', $course_id)}}" class="btn btn-primary float-right m-3">{{ trans('front.go_back') }}</a>
 					@if($lesson)
 						<div class="col-sm-12">
-							<h3>{{$lesson->name}}</h3>
-							<p>{{$lesson->description}}</p>
-							<div class="pl-4">{!! $lesson->content !!}</div>
+							<h3>{{$name}}</h3>
+							<p>{{$description}}</p>
+							<div class="pl-4">{!! $content !!}</div>
 
 							<div class="card">
-								@if($lesson->video)
-									@foreach($lesson->video as $video)
+								@if($video)
+									@foreach($video as $videoItem)
 										<video controls>
-										  	<source src='{{\Storage::url(str_replace("\\", "/", $video))}}' type="video/mp4">
+										  	<source src='{{\Storage::url(str_replace("\\", "/", $videoItem))}}' type="video/mp4">
 											{{ trans('front.not_support_video') }}
 										</video>
 									@endforeach
 								@endif
 
-								@if($lesson->gallery)
+								@if($gallery)
 									<div class="gallery">
 
 
-										@foreach($lesson->gallery as $image)
-											<img src='{{\Storage::url(str_replace("\\", "/", $image))}}' class="popup" alt="{{$lesson->name}}">
+										@foreach($gallery as $image)
+											<img src='{{\Storage::url(str_replace("\\", "/", $image))}}' class="popup" alt="{{$name}}">
 
 										@endforeach
 

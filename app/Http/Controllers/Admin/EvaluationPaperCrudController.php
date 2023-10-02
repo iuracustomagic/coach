@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\EvaluationPaperRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class EvaluationPaperCrudController
@@ -50,8 +51,40 @@ class EvaluationPaperCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-        CRUD::column('profession_id')->label(trans('labels.profession'));
-        //CRUD::column('structure');
+
+        $this->crud->addColumn([
+            'name'      => 'profession_id',
+            'type'      => 'select',
+            'label'     => trans('labels.profession'),
+            'attribute' => 'name',
+            'model'     => "App\Models\Profession",
+        ]);
+//        CRUD::column('profession_id')->label(trans('labels.profession'));
+//        if(App::getLocale() == 'ru') {
+//            $this->crud->addColumn([
+//                'name'      => 'profession_id',
+//                'type'      => 'select',
+//                'label'     => trans('labels.profession'),
+//                'attribute' => 'name',
+//                'model'     => "App\Models\Profession",
+//            ]);
+//        } else if(App::getLocale() == 'ro') {
+//            $this->crud->addColumn([
+//                'name'      => 'profession_id',
+//                'type'      => 'select',
+//                'label'     => trans('labels.profession'),
+//                'attribute' => 'name_ro',
+//                'model'     => "App\Models\Profession",
+//            ]);
+//        }else  {
+//            $this->crud->addColumn([
+//                'name'      => 'profession_id',
+//                'type'      => 'select',
+//                'label'     => trans('labels.profession'),
+//                'attribute' => 'name_en',
+//                'model'     => "App\Models\Profession",
+//            ]);
+//        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -123,6 +156,16 @@ class EvaluationPaperCrudController extends CrudController
                             'name'  => 'title',
                             'type' => 'text'
                         ],
+//                        [
+//                            'label' => trans('labels.point')."-ro",
+//                            'name'  => 'title_ro',
+//                            'type' => 'text'
+//                        ],
+//                        [
+//                            'label' => trans('labels.point')."-en",
+//                            'name'  => 'title_en',
+//                            'type' => 'text'
+//                        ],
                         [
                             'label' => trans('labels.mark'),
                             'name'  => 'mark',
@@ -174,6 +217,13 @@ class EvaluationPaperCrudController extends CrudController
             $points = json_decode($criteria->points);
             foreach($points as $pkey => $point){
                 $points[$pkey]->title = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title));
+//                if(isset($points[$pkey]->title_ro)) {
+//                    $points[$pkey]->title_ro = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_ro));
+//                }
+//                if(isset($points[$pkey]->title_en)) {
+//                    $points[$pkey]->title_en = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_en));
+//                }
+
                 if(!isset($points[$pkey]->code)){
                     $points[$pkey]->code = \Illuminate\Support\Str::random(12);
                 }

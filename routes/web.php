@@ -40,7 +40,7 @@ Route::get('/api/supervisor', 'App\Http\Controllers\Api\SupervisorController@ind
 Route::get('/api/report', 'App\Http\Controllers\Api\ReportController@index');
 
 Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses', 'App\Http\Controllers\MyCoursesController@list')->name('courses');
-Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses/course/{course_id}', 'App\Http\Controllers\MyCoursesController@view');
+Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses/course/{course_id}', 'App\Http\Controllers\MyCoursesController@view')->name('course');
 Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/my-courses/course/{course_id}/lesson/{lesson_id}', 'App\Http\Controllers\MyCoursesController@lesson');
 
 Route::middleware([\App\Http\Middleware\TrackLastActiveAt::class])->get('/quizzes/start-quiz/{quiz_id}', 'App\Http\Controllers\QuizController@start');

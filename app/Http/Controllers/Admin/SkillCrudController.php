@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\SkillRequest;
 use Backpack\CRUD\app\Http\Controllers\CrudController;
 use Backpack\CRUD\app\Library\CrudPanel\CrudPanelFacade as CRUD;
+use Illuminate\Support\Facades\App;
 
 /**
  * Class SkillCrudController
@@ -46,8 +47,14 @@ class SkillCrudController extends CrudController
      */
     protected function setupListOperation()
     {
-
-        CRUD::column('name')->label(trans('labels.name'));
+        CRUD::column('name')->label(trans('labels.name'))->limit(50);
+//        if(App::getLocale() == 'ru') {
+//            CRUD::column('name')->label(trans('labels.name'))->limit(50);
+//        } else if(App::getLocale() == 'ro') {
+//            CRUD::column('name_ro')->label(trans('labels.name'))->limit(50);
+//        }else  {
+//            CRUD::column('name_en')->label(trans('labels.name'))->limit(50);
+//        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -66,12 +73,30 @@ class SkillCrudController extends CrudController
     {
         CRUD::setValidation(SkillRequest::class);
 
-        CRUD::addField([   // 1-n relationship
-            'label'       => trans('labels.skill_name'), // Table column heading
+        CRUD::addField([
+            'label'       => trans('labels.skill_name'),
             'type'        => "text",
-            'name'        => 'name', // the column that contains the ID of that connected entity
-
+            'name'        => 'name',
+            'wrapper'   => [
+                'class'      => 'form-group col-md-4'
+            ],
         ]);
+//        CRUD::addField([
+//            'label'       => trans('labels.skill_name').'-ro',
+//            'type'        => "text",
+//            'name'        => 'name_ro',
+//            'wrapper'   => [
+//                'class'      => 'form-group col-md-4'
+//            ],
+//        ]);
+//        CRUD::addField([
+//            'label'       => trans('labels.skill_name').'-en',
+//            'type'        => "text",
+//            'name'        => 'name_en',
+//            'wrapper'   => [
+//                'class'      => 'form-group col-md-4'
+//            ],
+//        ]);
 
         CRUD::addField([   // 1-n relationship
             'label'       => trans('labels.criterias'), // Table column heading
@@ -83,7 +108,19 @@ class SkillCrudController extends CrudController
                     'type' => "text",
                     'name' => 'criteria', // the method on your model that defines the relationship
 
-                ]
+                ],
+//                [
+//                    'label'       => trans('labels.criteria').'-ro', // Table column heading
+//                    'type' => "text",
+//                    'name' => 'criteria_ro', // the method on your model that defines the relationship
+//
+//                ],
+//                [
+//                    'label'       => trans('labels.criteria').'-en', // Table column heading
+//                    'type' => "text",
+//                    'name' => 'criteria_en', // the method on your model that defines the relationship
+//
+//                ],
         ]]);
         /**
          * Fields can be defined using the fluent syntax or array syntax:

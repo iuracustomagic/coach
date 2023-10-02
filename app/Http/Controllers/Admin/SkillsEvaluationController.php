@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 
 use App\Models\EvaluationResult;
+use Illuminate\Support\Facades\App;
 
 class SkillsEvaluationController extends \App\Http\Controllers\Controller
 {
@@ -72,8 +73,26 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
         $evaluation = [];
 
         foreach($skillsList as $skill) {
-            $criteria = json_decode($skill->criteria, true);
-            $evaluation[$skill['name']] = $criteria;
+
+            $evaluation[$skill['name']] = json_decode($skill->criteria, true);
+
+//            if(App::getLocale() == 'ru') {
+//                $evaluation[$skill['name']] = json_decode($skill->criteria, true);
+//            }
+//
+//           else if (App::getLocale() == 'ro') {
+//               if(isset($skill->criteria_ro)) {
+//                   $evaluation[$skill['name_ro']] = json_decode($skill->criteria_ro, true);
+//               } else $evaluation[$skill['name_ro']] =[];
+//
+//            }
+//           else if (App::getLocale() == 'en') {
+//               if(isset($skill->criteria_en)) {
+//                   $evaluation[$skill['name_en']] = json_decode($skill->criteria_ro, true);
+//               } else $evaluation[$skill['name_en']] =[];
+//
+//            };
+
 
              }
 

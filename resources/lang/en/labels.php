@@ -92,4 +92,6 @@ return [
     'avg' => 'Average rating',
     'first_name' => 'Name',
     'role' => 'Role',
+    'evaluates' => 'Evaluates',
+    'date' => 'Date',
 ];
