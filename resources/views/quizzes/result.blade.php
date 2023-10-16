@@ -1,32 +1,56 @@
 @extends(backpack_view('blank'))
+@php
+    use Illuminate\Support\Facades\App;
+    $locale=App::getLocale();
+                if($locale == 'ru'){
+                            $courseName=$attempt->quiz->course->name;
+                            $lessonName = $attempt->quiz->lesson->name;
+                }   else if($locale == 'ro'){
+                        if(isset($attempt->quiz->course->name_ro)){
+                            $courseName=$attempt->quiz->course->name_ro;
+                        } else  $courseName=$attempt->quiz->course->name;
+                        if(isset($attempt->quiz->lesson->name_ro)){
+                           $lessonName = $attempt->quiz->lesson->name_ro;
+                        } else  $lessonName = $attempt->quiz->lesson->name;
+
+
+                }  else {
+                    if(isset($attempt->quiz->course->name_en)){
+                            $courseName=$attempt->quiz->course->name_en;
+                        } else  $courseName=$attempt->quiz->course->name;
+                        if(isset($attempt->quiz->lesson->name_en)){
+                           $lessonName = $attempt->quiz->lesson->name_en;
+                        } else  $lessonName = $attempt->quiz->lesson->name;
+                }
+@endphp
 
 @section('content')
 	<div class="row">
 		<div class="col-sm-12">
-		<!-- Default box -->	
+		<!-- Default box -->
 			<div class="card">
 				<div class="card-body">
-					<h3>Курс: {{$attempt->quiz->course->name}}</h3>
-					<h4>Урок: {{$attempt->quiz->lesson->name}}</h4>
+					<h3>{{ trans('labels.course') }}: {{$courseName}}</h3>
+					<h4>{{ trans('labels.lesson') }}: {{$lessonName}}</h4>
                     @if($attempt->status == 'PASSED')
                         <div class="alert alert-success" role="alert">
-                            <p>Вы успешно прошли тестирование!</p>
-                            <p>Ваша оценка: {{$attempt->mark}}</p>
+                            <p>{{ trans('front.success_quiz') }}</p>
+                            <p> {{ trans('front.your_mark') }}: {{$attempt->mark}}</p>
                         </div>
                     @elseif($attempt->status == 'FAILED')
                         <div class="alert alert-danger" role="alert">
-                            <p>Вы не прошли тестирование!</p>
-                            <p>Ваша оценка: {{$attempt->mark}}</p>
+                            <p>{{trans('front.failed_quiz') }}</p>
+                            <p>{{ trans('front.your_mark') }}: {{$attempt->mark}}</p>
                         </div>
                     @else
                         <div class="alert alert-info" role="alert">
-                            <p>Тестирование не было завершено!</p>
+                            <p>{{trans('front.not_finish_quiz') }}</p>
                         </div>
                     @endif
 				</div>
                 <div class="card-footer">
                     <a href="/my-courses/course/{{$attempt->quiz->course->id}}" class="btn btn-primary">
-                        <i class="las la-arrow-circle-left"></i> 
+                        <i class="las la-arrow-circle-left"></i>
                         {{ trans('front.lessons_list') }}
                     </a>
                     <div class="float-right">
@@ -53,4 +77,4 @@
 			</div>
 		</div>
 	</div>
-@endsection	
+@endsection

@@ -196,13 +196,16 @@
                 if($locale == 'ru'){
                             $name=$lesson->name;
                             $description = $lesson->description;
-                            $video = $lesson->video;
+                            if($lesson->video) {
+                                 $video = $lesson->video;
+                            } else $video =null;
+
                             if($lesson->content) {
                                 $content = $lesson->content;
-                            }
+                            } else $content =null;
                             if($lesson->gallery) {
                                 $gallery = $lesson->gallery;
-                            }
+                            } else $gallery = null;
                 }   else if($locale == 'ro'){
                         if(isset($lesson->name_ro)){
                             $name=$lesson->name_ro;

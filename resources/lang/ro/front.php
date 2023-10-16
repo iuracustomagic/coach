@@ -23,5 +23,9 @@ return [
 	'next_lesson' => 'Următoarea lecție',
 	'try_again' => 'Încercați',
 	'course_finished' => 'Cursul este finalizat',
-	'mark' => 'Evaluare: '
+	'mark' => 'Evaluare: ',
+    'success_quiz' => 'Ai trecut testul cu succes!',
+    'failed_quiz' => 'Nu ai trecut testul!',
+    'not_finish_quiz' => 'Testarea nu a fost finalizată!',
+    'your_mark' => 'Marca ta',
 ];

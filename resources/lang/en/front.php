@@ -23,5 +23,9 @@ return [
 	'next_lesson' => 'Next lesson',
 	'try_again' => 'Try again',
 	'course_finished' => 'Course finished',
-	'mark' => 'Mark: '
+	'mark' => 'Mark: ',
+    'success_quiz' => 'You have successfully passed the test!',
+    'failed_quiz' => 'You have not passed the test!',
+    'not_finish_quiz' => 'Testing was not completed!',
+    'your_mark' => 'Your mark',
 ];

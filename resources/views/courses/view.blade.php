@@ -45,33 +45,36 @@
 							@if($course->lessons)
 									@foreach($course->lessons as $lesson)
                                     @php
-                                        if($locale == 'ru'){
-                                        $lessonName=$lesson->name;
-                                        $lessonDescription = $lesson->description;
-                                         $banner = $lesson->banner;
-                                        }   else if($locale == 'ro'){
-                                                if(isset($lesson->name_ro)){
-                                                    $lessonName=$lesson->name_ro;
-                                                } else  $lessonName=$lesson->name;
-                                                if(isset($lesson->description_ro)){
-                                                   $lessonDescription = $lesson->description_ro;
-                                                } else  $lessonDescription = $lesson->description;
-                                                if(isset($lesson->banner_ro)){
-                                                    $banner=$lesson->banner_ro;
-                                                } else  $banner=$lesson->banner;
+                                        if($lesson->banner) {
+                                              $defaultBanner = $lesson->banner;
+                                          } else $defaultBanner = null;
+                                          if($locale == 'ru'){
+                                          $lessonName=$lesson->name;
+                                          $lessonDescription = $lesson->description;
+                                           $banner = $defaultBanner;
+                                          }   else if($locale == 'ro'){
+                                                  if(isset($lesson->name_ro)){
+                                                      $lessonName=$lesson->name_ro;
+                                                  } else  $lessonName=$lesson->name;
+                                                  if(isset($lesson->description_ro)){
+                                                     $lessonDescription = $lesson->description_ro;
+                                                  } else  $lessonDescription = $lesson->description;
+                                                  if(isset($lesson->banner_ro)){
+                                                      $banner=$lesson->banner_ro;
+                                                  } else  $banner=$defaultBanner;
 
 
-                                        }  else {
-                                            if(isset($lesson->name_en)){
-                                                    $lessonName=$lesson->name_en;
-                                                } else  $lessonName=$lesson->name;
-                                                if(isset($lesson->description_en)){
-                                                   $lessonDescription = $lesson->description_en;
-                                                } else  $lessonDescription = $lesson->description;
-                                                if(isset($lesson->banner_en)){
-                                                    $banner=$lesson->banner_en;
-                                                } else  $banner=$lesson->banner;
-                                        }
+                                          }  else {
+                                              if(isset($lesson->name_en)){
+                                                      $lessonName=$lesson->name_en;
+                                                  } else  $lessonName=$lesson->name;
+                                                  if(isset($lesson->description_en)){
+                                                     $lessonDescription = $lesson->description_en;
+                                                  } else  $lessonDescription = $lesson->description;
+                                                  if(isset($lesson->banner_en)){
+                                                      $banner=$lesson->banner_en;
+                                                  } else  $banner=$defaultBanner;
+                                          }
                                     @endphp
 											<div class="card">
 												<div class="card-horizontal">

@@ -13,10 +13,13 @@
 				<div class="card-body row">
 					@forelse($courses as $course)
                         @php
+                        if($course->banner) {
+                            $defaultBanner = $course->banner;
+                        } else $defaultBanner = null;
                             if($locale == 'ru'){
                             $name=$course->name;
                             $description = $course->description;
-                            $banner = $course->banner;
+                            $banner = $defaultBanner;
                             }   else if($locale == 'ro'){
                                     if(isset($course->name_ro)){
                                         $name=$course->name_ro;
@@ -26,7 +29,7 @@
                                     } else  $description = $course->description;
                                     if(isset($course->banner_ro)){
                                         $banner=$course->banner_ro;
-                                    } else  $banner=$course->banner;
+                                    } else  $banner=$defaultBanner;
 
 
                             }  else {
@@ -38,7 +41,7 @@
                                     } else  $description = $course->description;
                                      if(isset($course->banner_en)){
                                         $banner=$course->banner_en;
-                                    } else  $banner=$course->banner;
+                                    } else  $banner=$defaultBanner;
                             }
                         @endphp
 
