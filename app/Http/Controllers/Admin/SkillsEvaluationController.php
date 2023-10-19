@@ -71,35 +71,46 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
         $skillsList = Skill::all();
 
         $evaluation = [];
+        $evaluationRu = [];
+        $evaluationRo = [];
+        $evaluationEn = [];
 
         foreach($skillsList as $skill) {
 
-            $evaluation[$skill['name']] = json_decode($skill->criteria, true);
+            $evaluationRu[$skill['name']] = json_decode($skill->criteria, true);
+             if(isset($skill['name_ro'])) {
+                 $evaluationRo[$skill['name_ro']] = json_decode($skill->criteria, true);
+             } else $evaluationRo[$skill['name']] = json_decode($skill->criteria, true);
+             if(isset($skill['name_en'])) {
+                 $evaluationEn[$skill['name_en']] = json_decode($skill->criteria, true);
+             } else $evaluationEn[$skill['name']] = json_decode($skill->criteria, true);
+            if(App::getLocale() == 'ru') {
+                $evaluation[$skill['name']] = json_decode($skill->criteria, true);
+            }
 
-//            if(App::getLocale() == 'ru') {
-//                $evaluation[$skill['name']] = json_decode($skill->criteria, true);
-//            }
-//
-//           else if (App::getLocale() == 'ro') {
-//               if(isset($skill->criteria_ro)) {
-//                   $evaluation[$skill['name_ro']] = json_decode($skill->criteria_ro, true);
-//               } else $evaluation[$skill['name_ro']] =[];
-//
-//            }
-//           else if (App::getLocale() == 'en') {
-//               if(isset($skill->criteria_en)) {
-//                   $evaluation[$skill['name_en']] = json_decode($skill->criteria_ro, true);
-//               } else $evaluation[$skill['name_en']] =[];
-//
-//            };
+           else if (App::getLocale() == 'ro') {
+               if(isset($skill['name_ro'])) {
+                   $evaluation[$skill['name_ro']] = json_decode($skill->criteria, true);
+               } else $evaluation[$skill['name']] =json_decode($skill->criteria, true);
+
+            }
+           else if (App::getLocale() == 'en') {
+               if(isset($skill['name_en'])) {
+                   $evaluation[$skill['name_en']] = json_decode($skill->criteria, true);
+               } else $evaluation[$skill['name']] =json_decode($skill->criteria, true);
+
+            };
 
 
              }
 
-
+//dd($evaluation);
         return view('skills-evaluations.start', [
             'employee' => $employee,
             'evaluation' => $evaluation,
+            'evaluation_ru' => $evaluationRu,
+            'evaluation_ro' => $evaluationRo,
+            'evaluation_en' => $evaluationEn,
 
         ]);
     }
@@ -121,7 +132,12 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
 
         foreach($employee->skillsEvaluations as $key => $evaluation){ // $employee->monthsEvaluations
             $date = date('d/m/Y  H:i', strtotime($evaluation->created_at));
-            $results[$key] = json_decode($evaluation->result);
+            if(App::getLocale() == 'ru') {
+                $results[$key] = json_decode($evaluation->result);
+            } elseif(App::getLocale() == 'ro') {
+                $results[$key] = json_decode($evaluation->result_ro);
+            }else $results[$key] = json_decode($evaluation->result_en);
+
 
             $dates[] = [
                 'date' => $date,
@@ -131,23 +147,26 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
             ];
         }
 
+//dump($results);
 
         foreach($results as $key => $result){
             $evaluation_key = 'eval_'.$key;
-            $marks[] = $result->finalTotal;
-            foreach($result->items as $key_title => $question_ar){
-                $evaluation_subtotals[$evaluation_key][$key_title] = $question_ar->total;
-                //dump($question_ar->total);
-                $title_questions[$key_title] = [];
-                $idx =0;
+            $marks[] = isset($result->finalTotal) ?? $result->finalTotal ;
+            if(isset($result->items)) {
+                foreach($result->items as $key_title => $question_ar){
+                    $evaluation_subtotals[$evaluation_key][$key_title] = $question_ar->total;
+                    //dump($question_ar->total);
+                    $title_questions[$key_title] = [];
+                    $idx =0;
 
-                foreach ($question_ar->items as $key => $value) {
-
-                    $evaluation_values[$evaluation_key][$key_title][] = $value->value;
-                    $title_questions[$key_title][$idx] = $key;
-                    $idx++;
+                    foreach ($question_ar->items as $key => $value) {
+                        $evaluation_values[$evaluation_key][$key_title][] = $value->value;
+                        $title_questions[$key_title][$idx] = $key;
+                        $idx++;
+                    }
                 }
             }
+
         }
 //        dd($evaluation_values);
         return view('skills-evaluations.list', [
@@ -198,12 +217,14 @@ class SkillsEvaluationController extends \App\Http\Controllers\Controller
 
     public function save($employee_id, Request $request)
     {
-
+//dd($request);
         $skillsEvaluation = new SkillsEvaluationResult();
         $skillsEvaluation->employee_id = $employee_id;
         $skillsEvaluation->examiner_id = backpack_user()->id;
         $skillsEvaluation->mark = $request->input('mark');
         $skillsEvaluation->result = $request->input('result');
+        $skillsEvaluation->result_ro = $request->input('result_ro');
+        $skillsEvaluation->result_en = $request->input('result_en');
         $skillsEvaluation->conclusion = $request->input('conclusion');
         $skillsEvaluation->recommendation = $request->input('recommendation');
          if($skillsEvaluation->save()){

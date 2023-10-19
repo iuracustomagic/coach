@@ -55,6 +55,7 @@ class Branch extends Model
 
     public function getTotalEmployeesAttribute()
     {
+
         return $this->employees->count();
     }
 

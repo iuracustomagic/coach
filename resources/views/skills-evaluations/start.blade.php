@@ -44,7 +44,7 @@
                         <h6>{{trans('labels.evaluates')}}: <b> {{backpack_user()->name}}</b></h6>
                 </th>
                 <th class="date">
-                    <p>{{trans('labels.date')}}/p>
+                    <p>{{trans('labels.date')}}</p>
                     <p>{{date('Y-m-d')}}</p>
                 </th>
             </tr>
@@ -57,20 +57,37 @@
                     </th>
                 </tr>
                 @foreach($criterias as $criteria)
+                    @php
+                         $locale= Illuminate\Support\Facades\App::getLocale();
+
+                         if($locale == 'ru'){
+                             $name = $criteria['criteria'];
+                         }elseif($locale == 'ro') {
+                             if(isset( $criteria['criteria_ro'])) {
+                                 $name = $criteria['criteria_ro'];
+                             } else $name = $criteria['criteria'];
+
+                         } else {
+                             if(isset($criteria['criteria_en'])) {
+                                  $name = $criteria['criteria_en'];
+                             }else $name = $criteria['criteria'];
+
+                         };
+                    @endphp
                 <tr>
                     <td class="bg-body-tertiary" >
-                        <span>{{$criteria['criteria']}}</span>
+                        <span>{{$name}}</span>
 
                     </td>
                     <td class="w-25 bg-body-tertiary">
                         <div class="input-group ">
-                        <select class="form-select" id="{{$criteria['criteria']}}" name="{{$key}}" data-key="{{$key}}" >
-                            <option value="0" data-key="{{$key}}">Nota</option>
-                            <option value="1" data-key="{{$key}}">1 - Nu știe</option>
-                            <option value="2" data-key="{{$key}}">2 - Știe, dar nu are abilitățile necesare</option>
-                            <option value="3" data-key="{{$key}}">3 - Știe cum, dar nu o face ( demotivare)</option>
-                            <option value="4" data-key="{{$key}}">4 - Demonstrează parțial</option>
-                            <option value="5" data-key="{{$key}}">5 - Demonstrează întotdeauna</option>
+                        <select class="form-select" id="{{$name}}" name="{{$key}}" data-key="{{$key}}" >
+                            <option value="0" data-key="{{$key}}">{{trans('labels.grade')}}</option>
+                            <option value="1" data-key="{{$key}}">1 - {{trans('labels.grade_1')}}</option>
+                            <option value="2" data-key="{{$key}}">2 - {{trans('labels.grade_2')}}</option>
+                            <option value="3" data-key="{{$key}}">3 - {{trans('labels.grade_3')}}</option>
+                            <option value="4" data-key="{{$key}}">4 - {{trans('labels.grade_4')}}</option>
+                            <option value="5" data-key="{{$key}}">5 - {{trans('labels.grade_5')}}</option>
                         </select>
                         </div>
 
@@ -101,7 +118,7 @@
 
         </table>
         <div class="conclusion">
-            <h4>Concluzii / ce a fost corectat</h4>
+            <h4>{{trans('labels.conclusions')}}</h4>
             <ul class="pl-0">
                 @php $counter = 1; @endphp
                 @foreach($evaluation as $key => $criterias)
@@ -114,11 +131,13 @@
         </div>
         <div class="recommendations">
             <input type="hidden" name="result" value="" />
+            <input type="hidden" name="result_ro" value="" />
+            <input type="hidden" name="result_en" value="" />
             <input type="hidden" name="mark" value="0" />
             <input type="hidden" name="conclusion" value="" />
-            <label for="recommendationsTextarea" class="form-label recom_label">Recomendari:</label>
+            <label for="recommendationsTextarea" class="form-label recom_label">{{trans('labels.recommendations')}}:</label>
             <textarea class="form-control mb-3" name="recommendation" id="recommendationsTextarea" rows="3"></textarea>
-            <button type="submit" class="btn btn-primary float-right">Сохранить</button>
+            <button type="submit" class="btn btn-primary float-right">{{trans('labels.save')}}</button>
         </div>
     </form>
 @else
@@ -130,17 +149,34 @@
 
 <script>
 jQuery(document).ready(function($) {
-const evaluationList = {!! json_encode($evaluation) !!};
+const evaluationList = {!! json_encode($evaluation_ru) !!};
+const evaluationListRo = {!! json_encode($evaluation_ro) !!};
+const evaluationListEn = {!! json_encode($evaluation_en) !!};
+const lang = '{{\Illuminate\Support\Facades\App::getLocale()}}';
 
-function setTotalObj(evaluationList){
+
+function setTotalObj(evaluationList, lang){
     let Total = {}
     let subTotal = {}
     Object.entries(evaluationList).map((el,idx,) => {
         let key1 = el[0];
 
         let obj = {}
+        let key2 =null
         Object.values(el[1]).map((el2,idx,) => {
-            let key2 = el2['criteria'];
+            if(lang === 'ru') {
+                key2 = el2['criteria'];
+            } else if(lang === 'ro') {
+                if(el2['criteria_ro']) {
+                    key2 = el2['criteria_ro'];
+                } else key2 = el2['criteria'];
+                }
+                else if(lang === 'en') {
+                    if(el2['criteria_en']) {
+                        key2 = el2['criteria_en'];
+                    } else key2 = el2['criteria'];
+            }
+
             obj[key2] = {value:0}
 
         })
@@ -157,9 +193,13 @@ function setTotalObj(evaluationList){
     return Total;
 }
 
-let Total = setTotalObj(evaluationList)
+let Total = setTotalObj(evaluationList, 'ru')
+let TotalRo = setTotalObj(evaluationListRo, 'ro')
+let TotalEn = setTotalObj(evaluationListEn, 'en')
 
-
+    console.log(Total)
+    console.log(TotalRo)
+    console.log(TotalEn)
 function countTotal(Total){
     let FinalTotal = 0;
     let FinalNotNullable = 0;
@@ -220,9 +260,24 @@ $('select.form-select').each(function(index,element){
          let Name = element.name;
          let Id = element.id;
 
-         Total.items[Name].items[Id].value = $(element).find('option:selected').val();
-         let res = countTotal(Total)
-         render_total(res);
+         console.log(Name)
+
+
+         let res = null;
+         if(lang === 'ru') {
+             Total.items[Name].items[Id].value = $(element).find('option:selected').val();
+             const key =Object.keys(Total.items[Name])
+             console.log(key)
+             res = countTotal(Total)
+         } else if(lang === 'ro') {
+             TotalRo.items[Name].items[Id].value = $(element).find('option:selected').val();
+            res = countTotal(TotalRo)
+             render_total(res);
+         } else {
+             TotalEn.items[Name].items[Id].value = $(element).find('option:selected').val();
+             res = countTotal(TotalEn)
+         }
+             render_total(res);
      })
 
 });
@@ -230,6 +285,8 @@ $('select.form-select').each(function(index,element){
 
 $('form#skill_evaluation').on('submit', function(){
     $('input[name="result"]').val(JSON.stringify(Total));
+    $('input[name="result_ro"]').val(JSON.stringify(TotalRo));
+    $('input[name="result_en"]').val(JSON.stringify(TotalEn));
     console.log('Total =',Total)
     let conclusion = {}
     Object.entries(evaluationList).map((el,idx,) => {

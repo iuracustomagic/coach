@@ -52,39 +52,39 @@ class EvaluationPaperCrudController extends CrudController
     protected function setupListOperation()
     {
 
-        $this->crud->addColumn([
-            'name'      => 'profession_id',
-            'type'      => 'select',
-            'label'     => trans('labels.profession'),
-            'attribute' => 'name',
-            'model'     => "App\Models\Profession",
-        ]);
-//        CRUD::column('profession_id')->label(trans('labels.profession'));
-//        if(App::getLocale() == 'ru') {
-//            $this->crud->addColumn([
-//                'name'      => 'profession_id',
-//                'type'      => 'select',
-//                'label'     => trans('labels.profession'),
-//                'attribute' => 'name',
-//                'model'     => "App\Models\Profession",
-//            ]);
-//        } else if(App::getLocale() == 'ro') {
-//            $this->crud->addColumn([
-//                'name'      => 'profession_id',
-//                'type'      => 'select',
-//                'label'     => trans('labels.profession'),
-//                'attribute' => 'name_ro',
-//                'model'     => "App\Models\Profession",
-//            ]);
-//        }else  {
-//            $this->crud->addColumn([
-//                'name'      => 'profession_id',
-//                'type'      => 'select',
-//                'label'     => trans('labels.profession'),
-//                'attribute' => 'name_en',
-//                'model'     => "App\Models\Profession",
-//            ]);
-//        }
+//        $this->crud->addColumn([
+//            'name'      => 'profession_id',
+//            'type'      => 'select',
+//            'label'     => trans('labels.profession'),
+//            'attribute' => 'name',
+//            'model'     => "App\Models\Profession",
+//        ]);
+
+        if(App::getLocale() == 'ru') {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name',
+                'model'     => "App\Models\Profession",
+            ]);
+        } else if(App::getLocale() == 'ro') {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name_ro',
+                'model'     => "App\Models\Profession",
+            ]);
+        }else  {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name_en',
+                'model'     => "App\Models\Profession",
+            ]);
+        }
 
         /**
          * Columns can be defined using the fluent syntax or array syntax:
@@ -156,16 +156,16 @@ class EvaluationPaperCrudController extends CrudController
                             'name'  => 'title',
                             'type' => 'text'
                         ],
-//                        [
-//                            'label' => trans('labels.point')."-ro",
-//                            'name'  => 'title_ro',
-//                            'type' => 'text'
-//                        ],
-//                        [
-//                            'label' => trans('labels.point')."-en",
-//                            'name'  => 'title_en',
-//                            'type' => 'text'
-//                        ],
+                        [
+                            'label' => trans('labels.point')."-ro",
+                            'name'  => 'title_ro',
+                            'type' => 'text'
+                        ],
+                        [
+                            'label' => trans('labels.point')."-en",
+                            'name'  => 'title_en',
+                            'type' => 'text'
+                        ],
                         [
                             'label' => trans('labels.mark'),
                             'name'  => 'mark',

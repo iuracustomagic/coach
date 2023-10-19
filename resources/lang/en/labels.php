@@ -94,4 +94,13 @@ return [
     'role' => 'Role',
     'evaluates' => 'Evaluates',
     'date' => 'Date',
+    'save' => 'Save',
+    'recommendations' => 'Recommendations',
+    'conclusions' => 'Conclusions / What has been fixed',
+    'grade' => 'Nota',
+    'grade_1' => 'He does not know',
+    'grade_2' => 'He knows, but he doesn\'t have the necessary skills',
+    'grade_3' => 'Knows how, but doesn\'t do it (demotivation)',
+    'grade_4' => 'Partially demonstrate',
+    'grade_5' => 'Always demonstrate',
 ];

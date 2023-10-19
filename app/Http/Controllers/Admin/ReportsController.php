@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Models\UserBranches;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use App\Models\Branch;
@@ -11,18 +12,18 @@ use Illuminate\Http\Request;
 
 class ReportsController extends Controller
 {
-    public function setup()
-    {
-
-        CRUD::enableExportButtons();
-    }
+//    public function setup()
+//    {
+//
+//        CRUD::enableExportButtons();
+//    }
 
     public function branchSummary($branch_id){
         $branch = Branch::find($branch_id);
+//        dd($branch->activeEmployees);
+        $hierarchy = $this->buildSummaryHierarchy($branch->activeEmployees, $branch_id);
 
-        $hierarchy = $this->buildSummaryHierarchy($branch->activeEmployees);
-
-
+//        dd($hierarchy);
         $rows = $this->drawSummaryRows($hierarchy);
 
 //        if(backpack_user()->name == 'Webmaster') {
@@ -53,17 +54,53 @@ class ReportsController extends Controller
         ]);
     }
 
-    protected function buildSummaryHierarchy($employees, $supervisor = null)
+    protected function buildSubordinates($employees, $branch_id, $supervisor = null) {
+        $leadership = [12, 18, 22, 44, 36, 64, 68, 85, 79, 95, 105, 115];
+        $hierarchy = array();
+        foreach($employees as $employee){
+
+            $userBranches =UserBranches::where('user_id', $employee->id)->first();
+//            dump('user',$employee->id, '-branch', $passed->branch_id);
+
+            if($supervisor == $employee->supervisor_id && $userBranches->branch_id == $branch_id) {
+
+                    if ($employee->active == 1) {
+                        $hierarchy[$employee->id] = [
+                            'id' => $employee->id,
+                            'supervisor' => $employee->supervisor ? $employee->supervisor->name : '-',
+                            'name' => $employee->name,
+                            'proffession' => $employee->profession ? $employee->profession->name : '-',
+                            'leader' => $employee->profession ? in_array($employee->profession->id, $leadership) : false,
+                            'has_subordinates' => $employee->subordinates->count() > 0 ? true : false,
+                            'subordinates' => $employee->subordinates->count() > 0 ? $this->buildSubordinates($employee->subordinates, $branch_id, $employee->id) : null,
+                            'registered' => date('Y-m-d', strtotime($employee->created_at)),
+                            'theory_available' => $employee->totalAvailable,
+                            'theory_passed' => $employee->totalPassed,
+                            'theory_avg' => $employee->avg_total,
+                            'last_mark' => $employee->getLastEvaluation ? $employee->getLastEvaluation->mark : null,
+                            'last_marks' => $employee->getLastMarks ?: '-',
+                            'subordinates_avg' => $employee->getSubordinatesAvg(),
+                            'final_grade' => $employee->getFinalGrade()
+                        ];
+                    }
+
+
+            }
+        }
+        return $hierarchy;
+    }
+    protected function buildSummaryHierarchy($employees, $branch_id)
     {
         $leadership = [12, 18, 22, 44, 36, 64, 68, 85, 79, 95, 105, 115];
         $hierarchy = array();
-//        dd($employees);
-//        exit();
+//        dump($employees);
         foreach($employees as $employee){
-            if($supervisor == $employee->supervisor_id){
+//            if($supervisor == $employee->supervisor_id){
 //                if($employee->getLastEvaluation) {
 //
 //                }
+            $userBranches =UserBranches::where('user_id', $employee->id)->first();
+            if($userBranches->branch_id == $branch_id) {
                 if($employee->active == 1) {
                     $hierarchy[$employee->id] = [
                         'id' => $employee->id,
@@ -72,7 +109,7 @@ class ReportsController extends Controller
                         'proffession' => $employee->profession ? $employee->profession->name : '-',
                         'leader' => $employee->profession ? in_array($employee->profession->id, $leadership) : false,
                         'has_subordinates' => $employee->subordinates->count() > 0 ? true : false,
-                        'subordinates' => $employee->subordinates->count() > 0 ? $this->buildSummaryHierarchy($employee->subordinates, $employee->id) : null,
+                        'subordinates' => $employee->subordinates->count() > 0 ? $this->buildSubordinates($employee->subordinates, $branch_id, $employee->id) : null,
                         'registered' => date('Y-m-d',strtotime($employee->created_at)),
                         'theory_available' => $employee->totalAvailable,
                         'theory_passed' => $employee->totalPassed,
@@ -83,10 +120,13 @@ class ReportsController extends Controller
                         'final_grade' => $employee->getFinalGrade()
                     ];
                 }
+            }
+
 
             }
-        }
 
+//        dd($hierarchy);
+//        exit();
         return $hierarchy;
     }
 

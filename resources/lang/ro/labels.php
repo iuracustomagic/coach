@@ -94,4 +94,14 @@ return [
     'role' => 'Role',
     'evaluates' => 'Evaluează',
     'date' => 'Data',
+    'save' => 'Salvați',
+    'recommendations' => 'Recomandări',
+    'conclusions' => 'Concluzii / ce a fost corectat',
+    'grade' => 'Nota',
+    'grade_1' => 'Nu știe',
+    'grade_2' => 'Știe, dar nu are abilitățile necesare',
+    'grade_3' => 'Știe cum, dar nu o face ( demotivare)',
+    'grade_4' => 'Demonstrează parțial',
+    'grade_5' => 'Demonstrează întotdeauna',
+
 ];
