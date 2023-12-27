@@ -41,16 +41,16 @@
                             {{$employee->name}}
                             <a class="btn btn-sm btn-success" href="/admin/evaluation/{{$employee->id}}/start"><i class="la la-chalkboard"></i></a>
                         </h3>
-                        <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
-                        <h6>Начальник: <b>{{$employee->supervisor ? $employee->supervisor->name : '-'}}</b></h6>
-                        <h6>Средний балл за месяц: <b>{{$avg_points}}</b></h6>
-                        <h6>Средняя оценка за месяц: <b>{{$avg_mark}}</b></h6>
+                        <h6>{{ trans('labels.profession') }}: <b>{{$employee->profession->name}}</b></h6>
+                        <h6>{{ trans('labels.director') }}: <b>{{$employee->supervisor ? $employee->supervisor->name : '-'}}</b></h6>
+                        <h6>{{ trans('labels.average_score_per_month') }}: <b>{{$avg_points}}</b></h6>
+                        <h6>{{ trans('labels.average_rating_per_month') }}: <b>{{$avg_mark}}</b></h6>
                     </th>
                     <th class="date">
                     @foreach($dates as $date)
 
-                            <p>Дата проверки: {{$date['date']}}</p>
-                            <p>Проверял: {{$date['examiner']}}</p>
+                            <p>{{ trans('labels.inspection_date') }}: {{$date['date']}}</p>
+                            <p>{{ trans('labels.checked') }}: {{$date['examiner']}}</p>
                             @if($date['comment'])
                                 <button class="btn btn-sm btn-info show-comment" data-comment="{{$date['comment']}}">
                                     <i class="la la-comment"></i>
@@ -60,11 +60,19 @@
                     @endforeach
                     </th>
                 </tr>
-
+{{--@dump($results)--}}
                 @foreach($results as  $key=>$criteria)
 
                     <tr>
-                        <th>{{$criteria['title']}}</th>
+                        <th>
+                            @if(Illuminate\Support\Facades\App::getLocale() == 'en' && isset($criteria['title_en']))
+                                {{$criteria['title_en']}}
+                            @elseif(Illuminate\Support\Facades\App::getLocale() == 'ro' && isset($criteria['title_ro']))
+                                {{$criteria['title_ro']}}
+                            @else
+                                {{$criteria['title']}}
+                            @endif
+                        </th>
                         <th></th>
 
                     </tr>
@@ -78,9 +86,19 @@
                             <td>
 
                                 <ul class="legend">
-                                    @foreach($titleArr['legend'] as $title)
+                                    @if(Illuminate\Support\Facades\App::getLocale() == 'en' && isset($titleArr['legend_en']))
+                                    @foreach($titleArr['legend_en'] as $title)
                                         <li>{{$title}}</li>
                                     @endforeach
+                                    @elseif(Illuminate\Support\Facades\App::getLocale() == 'ro' && isset($titleArr['legend_ro']))
+                                        @foreach($titleArr['legend_ro'] as $title)
+                                            <li>{{$title}}</li>
+                                        @endforeach
+                                    @else
+                                        @foreach($titleArr['legend'] as $title)
+                                            <li>{{$title}}</li>
+                                        @endforeach
+                                    @endif
                                 </ul>
                             </td>
 
@@ -101,7 +119,7 @@
                 @endforeach
 
                 <tr>
-                    <th>Набрано баллов:</th>
+                    <th>{{ trans('labels.points_gained') }}:</th>
                     <th class="totals">
                     @foreach($totals['points'] as $date => $points)
                             <div>
@@ -113,7 +131,7 @@
                 </tr>
 
                 <tr>
-                    <th colspan="1">Оценка:</th>
+                    <th colspan="1">{{ trans('labels.mark') }}:</th>
                     <th class="totals">
                     @foreach($totals['marks'] as $date => $mark)
                     <div>
@@ -126,7 +144,7 @@
 
             </table>
     @else
-        <h3>Нет данных за текущий месяц</h3>
+        <h3>{{ trans('labels.no_data_for_month') }}</h3>
     @endif
 @endsection
 
@@ -134,7 +152,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Комментарий</h5>
+                <h5 class="modal-title">{{ trans('labels.comment') }}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
                 </button>

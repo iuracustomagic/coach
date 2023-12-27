@@ -67,7 +67,15 @@ class EvaluationController extends \App\Http\Controllers\Controller
             'name',
             'id'
         );
-
+        $criteriasList_ro = EvaluationCriteria::all()->pluck(
+            'name_ro',
+            'id'
+        );
+        $criteriasList_en = EvaluationCriteria::all()->pluck(
+            'name_en',
+            'id'
+        );
+//dump($criteriasList);
         $evaluation = [];
         $validation = [];
         $counter = 0;
@@ -75,8 +83,12 @@ class EvaluationController extends \App\Http\Controllers\Controller
         if(null !== $employee->profession){
             if(null !== $employee->profession->evaluation){
                 $object = json_decode($employee->profession->evaluation->structure);
+
                 foreach($object as $criterias){
+
                     $evaluation[$criterias->criteria]['title'] = $criteriasList[$criterias->criteria];
+                    $evaluation[$criterias->criteria]['title_ro'] = isset($criteriasList_ro[$criterias->criteria])? $criteriasList_ro[$criterias->criteria]: $criteriasList[$criterias->criteria];
+                    $evaluation[$criterias->criteria]['title_en'] = isset($criteriasList_en[$criterias->criteria])? $criteriasList_en[$criterias->criteria]: $criteriasList[$criterias->criteria];
                     $points = json_decode($criterias->points, true);
                     $bestMark = 0;
                     $worstMark = 0;
@@ -93,6 +105,7 @@ class EvaluationController extends \App\Http\Controllers\Controller
                     $evaluation[$criterias->criteria]['worst'] = $worstMark;
                     $counter++;
                 }
+//                dd($evaluation);
             } else {
                 abort(404, 'There is no evaluation list for profession ' . $employee->profession->name);
             }
@@ -131,11 +144,16 @@ class EvaluationController extends \App\Http\Controllers\Controller
         foreach($employee->evaluations as $evaluation){ // $employee->monthsEvaluations
             $date = date('d-m-Y', strtotime($evaluation->created_at));
             $result = json_decode($evaluation->result);
+//            dump($result);
             foreach($result as $id => $criteria){
                 $results[$id]['title'] = $criteria->title;
+                $results[$id]['title_ro'] =isset($criteria->title_ro) ? $criteria->title_ro: $criteria->title;
+                $results[$id]['title_en'] =isset($criteria->title_en) ? $criteria->title_en: $criteria->title;
                 foreach($criteria->points as $group => $points){
                     foreach($points as $code => $point){
                         $results[$id]['points'][$date][$group]['legend'][$code] = $point->title . ' (' . $point->mark . ')';
+                        $results[$id]['points'][$date][$group]['legend_ro'][$code] =isset($point->title_ro) ? $point->title_ro : $point->title . ' (' . $point->mark . ')';
+                        $results[$id]['points'][$date][$group]['legend_en'][$code] = isset($point->title_en) ? $point->title_en : $point->title . ' (' . $point->mark . ')';
                         if($point->selected){
                             $results[$id]['points'][$date][$group]['marks'][$date] = $point->mark;
                         }

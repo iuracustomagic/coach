@@ -62,28 +62,46 @@
                 <tr>
                     <th>
                         <h3>{{$employee->name}}</h3>
-                        <h6>Должность: <b>{{$employee->profession->name}}</b></h6>
-                        <h6>Начальник: <b>{{$employee->supervisor ? $employee->supervisor->name : '-'}}</b></h6>
-                        <h6>Оценивает: <b>{{backpack_user()->name}}</b></h6>
+                        <h6>{{ trans('labels.profession') }}: <b>{{$employee->profession->name}}</b></h6>
+                        <h6>{{ trans('labels.director') }}: <b>{{$employee->supervisor ? $employee->supervisor->name : '-'}}</b></h6>
+                        <h6>{{ trans('labels.evaluates') }}: <b>{{backpack_user()->name}}</b></h6>
                     </th>
                     <th class="date">
-                        <p>Дата проверки</p>
+                        <p>{{ trans('labels.inspection_date') }}</p>
                         <p>{{date('Y-m-d')}}</p>
                     </th>
                 </tr>
+{{--                @dump($evaluation)--}}
                 @foreach($evaluation as $criteria => $criterias)
                     <tr>
                         <th colspan="2">
-                            <h5 class="m-0">{{$criterias['title']}}</h5>
+                            <h5 class="m-0">
+                                @if(Illuminate\Support\Facades\App::getLocale() == 'en' && isset($criterias['title_en']))
+                                {{$criterias['title_en']}}
+                                @elseif(Illuminate\Support\Facades\App::getLocale() == 'ro' && isset($criterias['title_ro']))
+                                    {{$criterias['title_ro']}}
+                                @else
+                                    {{$criterias['title']}}
+                                    @endif
+                            </h5>
                         </th>
                     </tr>
                     @foreach($criterias['points'] as $groupName => $group)
                     <tr>
                         <td>
                             @foreach($group as $inputId => $point)
+
+
                                 <input id="{{$inputId}}" type="radio" name="{{$groupName}}" value="{{$point['mark']}}" data-criteria="{{$criteria}}" />
                                 <label for="{{$inputId}}" class="point @if($point['mark'] == $criterias['best']) good @elseif($point['mark'] == $criterias['worst']) bad @else medium @endif">
-                                    {{$point['title']}} <span><b>{{$point['mark']}}</b></span>
+                                    @if(Illuminate\Support\Facades\App::getLocale() == 'en' && isset($point['title_en']))
+                                        {{$point['title_en']}}
+                                    @elseif(Illuminate\Support\Facades\App::getLocale() == 'ro' && isset($point['title_ro']))
+                                        {{$point['title_ro']}}
+                                    @else
+                                        {{$point['title']}}
+                                    @endif
+                                    <span><b>{{$point['mark']}}</b></span>
                                 </label>
                             @endforeach
                         </td>
@@ -92,11 +110,11 @@
                     @endforeach
                 @endforeach
                 <tr>
-                    <th>Набрано баллов:</th>
+                    <th>{{ trans('labels.points_gained') }}:</th>
                     <th id="total_points" class="total-points">-</th>
                 </tr>
                 <tr>
-                    <th>Оценка:</th>
+                    <th>{{ trans('labels.mark') }}:</th>
                     <th id="evaluation_mark" class="total-points" data-counter="{{$counter}}">-</th>
                 </tr>
                 <tr>
@@ -105,14 +123,14 @@
                         <input type="hidden" name="total_points" value="0" />
                         <input type="hidden" name="total_questions" value="{{$counter}}" />
                         <input type="hidden" name="mark" value="0" />
-                        <textarea name="comment" rows="5" maxlength="255" placeholder="Комментарий" style="width: 100%; padding: 10px; margin-bottom: 10px"></textarea>
-                        <button type="submit" class="btn btn-primary float-right">Сохранить</button>
+                        <textarea name="comment" rows="5" maxlength="255" placeholder="{{ trans('labels.comment') }}" style="width: 100%; padding: 10px; margin-bottom: 10px"></textarea>
+                        <button type="submit" class="btn btn-primary float-right">{{ trans('labels.save') }}</button>
                     </th>
                 </tr>
             </table>
         </form>
     @else
-        <h3>Нет оценочных листов для должности <b>{{$employee->profession->name}}</b></h3>
+        <h3>{{ trans('labels.no_evaluation_paper') }} <b>{{$employee->profession->name}}</b></h3>
     @endif
 @endsection
 

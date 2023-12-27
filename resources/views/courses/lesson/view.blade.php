@@ -240,6 +240,7 @@
                             $gallery=$lesson->gallery_en;
                         } else  $gallery=null;
                 }
+
 @endphp
 @section('content')
 
@@ -256,7 +257,7 @@
 							<div class="pl-4">{!! $content !!}</div>
 
 							<div class="card">
-								@if($video)
+								@if(isset($video) && is_array($video))
 									@foreach($video as $videoItem)
 										<video controls>
 										  	<source src='{{\Storage::url(str_replace("\\", "/", $videoItem))}}' type="video/mp4">
@@ -265,7 +266,7 @@
 									@endforeach
 								@endif
 
-								@if($gallery)
+								@if(isset($gallery) && is_array($gallery))
 									<div class="gallery">
 
 

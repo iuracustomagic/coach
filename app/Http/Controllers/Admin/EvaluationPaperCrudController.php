@@ -105,16 +105,41 @@ class EvaluationPaperCrudController extends CrudController
 
         //CRUD::field('profession_id')->label(trans('labels.profession'));
 
-        CRUD::addField([   // 1-n relationship
-            'label'       => trans('labels.profession'), // Table column heading
-            'type'        => "select2_from_ajax",
-            'name'        => 'profession_id', // the column that contains the ID of that connected entity
-            'entity'      => 'profession', // the method that defines the relationship in your Model
-            'attribute'   => "name", // foreign key attribute that is shown to user
-            'data_source' => url("api/profession"), // url to controller search function (with /{id} should return model)
-            'placeholder'             => trans('labels.select_profession'), // placeholder for the select
-            'minimum_input_length'    => 0 // minimum characters to type before querying results
-        ]);
+        if(App::getLocale() == 'ru') {
+            CRUD::addField([   // 1-n relationship
+                'label'       => trans('labels.profession'), // Table column heading
+                'type'        => "select2_from_ajax",
+                'name'        => 'profession_id', // the column that contains the ID of that connected entity
+                'entity'      => 'profession', // the method that defines the relationship in your Model
+                'attribute'   => "name", // foreign key attribute that is shown to user
+                'data_source' => url("api/profession"), // url to controller search function (with /{id} should return model)
+                'placeholder'             => trans('labels.select_profession'), // placeholder for the select
+                'minimum_input_length'    => 0 // minimum characters to type before querying results
+            ]);
+        } elseif (App::getLocale() == 'ro') {
+            CRUD::addField([   // 1-n relationship
+                'label'       => trans('labels.profession'), // Table column heading
+                'type'        => "select2_from_ajax",
+                'name'        => 'profession_id', // the column that contains the ID of that connected entity
+                'entity'      => 'profession', // the method that defines the relationship in your Model
+                'attribute'   => "name_ro", // foreign key attribute that is shown to user
+                'data_source' => url("api/profession"), // url to controller search function (with /{id} should return model)
+                'placeholder'             => trans('labels.select_profession'), // placeholder for the select
+                'minimum_input_length'    => 0 // minimum characters to type before querying results
+            ]);
+        } else {
+            CRUD::addField([   // 1-n relationship
+                'label'       => trans('labels.profession'), // Table column heading
+                'type'        => "select2_from_ajax",
+                'name'        => 'profession_id', // the column that contains the ID of that connected entity
+                'entity'      => 'profession', // the method that defines the relationship in your Model
+                'attribute'   => "name_en", // foreign key attribute that is shown to user
+                'data_source' => url("api/profession"), // url to controller search function (with /{id} should return model)
+                'placeholder'             => trans('labels.select_profession'), // placeholder for the select
+                'minimum_input_length'    => 0 // minimum characters to type before querying results
+            ]);
+        }
+
 
         CRUD::addField([   // Hidden
             'name'  => 'criteria_id',
@@ -133,7 +158,8 @@ class EvaluationPaperCrudController extends CrudController
                     'name' => 'criteria', // the method on your model that defines the relationship
                     'model'                   => "App\Models\EvaluationCriteria", // foreign key model
                     'data_source' => url("api/criterias"), // url to controller search function (with /{id} should return model)
-                    'delay' => 500, // the minimum amount of time between ajax requests when searching in the field
+                    'delay' => 500,
+                    'attribute'   =>App::getLocale() == 'ru' ? "name" : "name_ro",// the minimum amount of time between ajax requests when searching in the field
                     'placeholder'             => trans('labels.select_criteria'), // placeholder for the select
                     'minimum_input_length'    => 0, // minimum characters to type before querying results
                     'method'                  => 'GET',
@@ -217,12 +243,12 @@ class EvaluationPaperCrudController extends CrudController
             $points = json_decode($criteria->points);
             foreach($points as $pkey => $point){
                 $points[$pkey]->title = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title));
-//                if(isset($points[$pkey]->title_ro)) {
-//                    $points[$pkey]->title_ro = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_ro));
-//                }
-//                if(isset($points[$pkey]->title_en)) {
-//                    $points[$pkey]->title_en = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_en));
-//                }
+                if(isset($points[$pkey]->title_ro)) {
+                    $points[$pkey]->title_ro = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_ro));
+                }
+                if(isset($points[$pkey]->title_en)) {
+                    $points[$pkey]->title_en = preg_replace('/[[:cntrl:]]/', '', trim($points[$pkey]->title_en));
+                }
 
                 if(!isset($points[$pkey]->code)){
                     $points[$pkey]->code = \Illuminate\Support\Str::random(12);
@@ -254,5 +280,62 @@ class EvaluationPaperCrudController extends CrudController
         $this->crud->getRequest()->request->add(['structure'=> json_encode($structure, JSON_UNESCAPED_UNICODE)]);
         $response = $this->traitUpdate();
         return $response;
+    }
+    protected function setupShowOperation()
+    {
+        $this->crud->set('show.setFromDb', false);
+
+        if(App::getLocale() == 'ru') {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name',
+                'model'     => "App\Models\Profession",
+            ]);
+        } else if(App::getLocale() == 'ro') {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name_ro',
+                'model'     => "App\Models\Profession",
+            ]);
+        }else  {
+            $this->crud->addColumn([
+                'name'      => 'profession_id',
+                'type'      => 'select',
+                'label'     => trans('labels.profession'),
+                'attribute' => 'name_en',
+                'model'     => "App\Models\Profession",
+            ]);
+        }
+
+//        $this->crud->addColumn([   // repeatable
+//            'name'  => 'structure',
+//            'label' => trans('labels.evaluation_paper'),
+//            'type' => 'table',
+//            'columns' => [
+//                'address_type_id'  =>  __('models/addresses.fields.address_type'),
+//                'address_type.name'  =>  __('models/addresses.fields.address_type'),
+//                'address1'  => __('models/addresses.fields.address1'),
+//                'address2'  => __('models/addresses.fields.address2'),
+//                'city'  => __('models/addresses.fields.address2'),
+//                'postal_code'  => __('models/addresses.fields.address2'),
+//                'country.name'  => __('models/countries.singular'),
+//            ],
+//
+//
+//        ]);
+
+//        CRUD::column('course_id')->label(trans('labels.course'))->limit(100);
+//        CRUD::column('lesson_id')->label(trans('labels.lesson'))->limit(100);
+//        CRUD::column('total_questions')->label(trans('labels.total_questions'));
+//        CRUD::column('questions_to_show')->label(trans('labels.questions_to_show'));
+//        CRUD::column('final')->label(trans('labels.is_final'))->escaped(false)->limit(-1);
+//        CRUD::column('created_at')->label(trans('labels.created'));
+//        CRUD::column('updated_at')->label(trans('labels.updated'));
+//        CRUD::column('questions_info')->label(trans('labels.questions'))->escaped(false)->limit(-1);
+
     }
 }

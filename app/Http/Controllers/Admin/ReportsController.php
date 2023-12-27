@@ -26,10 +26,10 @@ class ReportsController extends Controller
 //        dd($hierarchy);
         $rows = $this->drawSummaryRows($hierarchy);
 
-//        if(backpack_user()->name == 'Webmaster') {
-//            dump("hierarchy", $hierarchy);
-//            dump("rows", $rows);
-//        };
+        if(backpack_user()->name == 'Webmaster') {
+            dump("hierarchy", $hierarchy);
+            dump("rows", $rows);
+        };
 
 
         return view('reports/branch-summary', [
@@ -61,31 +61,33 @@ class ReportsController extends Controller
 
             $userBranches =UserBranches::where('user_id', $employee->id)->first();
 //            dump('user',$employee->id, '-branch', $passed->branch_id);
+if(isset($userBranches->branch_id)) {
+    if($supervisor == $employee->supervisor_id && $userBranches->branch_id == $branch_id) {
 
-            if($supervisor == $employee->supervisor_id && $userBranches->branch_id == $branch_id) {
-
-                    if ($employee->active == 1) {
-                        $hierarchy[$employee->id] = [
-                            'id' => $employee->id,
-                            'supervisor' => $employee->supervisor ? $employee->supervisor->name : '-',
-                            'name' => $employee->name,
-                            'proffession' => $employee->profession ? $employee->profession->name : '-',
-                            'leader' => $employee->profession ? in_array($employee->profession->id, $leadership) : false,
-                            'has_subordinates' => $employee->subordinates->count() > 0 ? true : false,
-                            'subordinates' => $employee->subordinates->count() > 0 ? $this->buildSubordinates($employee->subordinates, $branch_id, $employee->id) : null,
-                            'registered' => date('Y-m-d', strtotime($employee->created_at)),
-                            'theory_available' => $employee->totalAvailable,
-                            'theory_passed' => $employee->totalPassed,
-                            'theory_avg' => $employee->avg_total,
-                            'last_mark' => $employee->getLastEvaluation ? $employee->getLastEvaluation->mark : null,
-                            'last_marks' => $employee->getLastMarks ?: '-',
-                            'subordinates_avg' => $employee->getSubordinatesAvg(),
-                            'final_grade' => $employee->getFinalGrade()
-                        ];
-                    }
+        if ($employee->active == 1) {
+            $hierarchy[$employee->id] = [
+                'id' => $employee->id,
+                'supervisor' => $employee->supervisor ? $employee->supervisor->name : '-',
+                'name' => $employee->name,
+                'proffession' => $employee->profession ? $employee->profession->name : '-',
+                'leader' => $employee->profession ? in_array($employee->profession->id, $leadership) : false,
+                'has_subordinates' => $employee->subordinates->count() > 0 ? true : false,
+                'subordinates' => $employee->subordinates->count() > 0 ? $this->buildSubordinates($employee->subordinates, $branch_id, $employee->id) : null,
+                'registered' => date('Y-m-d', strtotime($employee->created_at)),
+                'theory_available' => $employee->totalAvailable,
+                'theory_passed' => $employee->totalPassed,
+                'theory_avg' => $employee->avg_total,
+                'last_mark' => $employee->getLastEvaluation ? $employee->getLastEvaluation->mark : null,
+                'last_marks' => $employee->getLastMarks ?: '-',
+                'subordinates_avg' => $employee->getSubordinatesAvg(),
+                'final_grade' => $employee->getFinalGrade()
+            ];
+        }
 
 
-            }
+    }
+}
+
         }
         return $hierarchy;
     }

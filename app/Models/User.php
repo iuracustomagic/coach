@@ -36,6 +36,8 @@ class User extends Authenticatable
         'password',
         'birthday',
         'image',
+        'medical_book',
+        'sanitary_minimum',
         //'division_id',
         //'branch_id',
         'profession_id',

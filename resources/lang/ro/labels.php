@@ -103,5 +103,15 @@ return [
     'grade_3' => 'Știe cum, dar nu o face ( demotivare)',
     'grade_4' => 'Demonstrează parțial',
     'grade_5' => 'Demonstrează întotdeauna',
-
+    'medical_book' => 'Carte medicala',
+    'sanitary_minimum' => 'Curs minim sanitar',
+    'director' => 'Şeful',
+    'inspection_date' => 'Data inspecției',
+    'points_gained' => 'Puncte câștigate',
+    'comment' => 'Un comentariu',
+    'no_evaluation_paper' => 'Nu există Foaie de evaluare pentru poziție',
+    'average_score_per_month' => 'Scorul mediu pe lună',
+    'average_rating_per_month' => 'Evaluare medie pe lună',
+    'checked' => 'Verificat',
+    'no_data_for_month' => 'Nu există date pentru luna curentă',
 ];
